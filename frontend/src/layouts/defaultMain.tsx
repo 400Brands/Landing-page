@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Mail, Phone } from "lucide-react";
 

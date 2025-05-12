@@ -2,7 +2,6 @@ import DefaultMain from "@/layouts/defaultMain";
 import {
   ArrowBigLeft,
   ArrowBigRight,
-  ArrowLeft,
   Check,
   Headset,
   Phone,
@@ -11,9 +10,7 @@ import {
 import { useState } from "react";
 import {
   motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
+  AnimatePresence
 } from "framer-motion";
 import { useRef } from "react";
 
@@ -70,12 +67,7 @@ const staggerContainer = {
 export default function IndexPage() {
   const [currentWork, setCurrentWork] = useState(0);
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  
 
   const works = [
     {
