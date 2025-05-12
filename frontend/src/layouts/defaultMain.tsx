@@ -1,91 +1,98 @@
-import { Link } from "@heroui/link";
-import { Navbar } from "@/components/navbar";
+"use client";
 import { useEffect, useRef, useState } from "react";
-import { FacebookIcon, InstagramIcon, Linkedin, Mail, MessageSquare, Phone, X } from "lucide-react";
-import { TwitterIcon } from "@/components/icons";
+import { Navbar } from "@/components/navbar";
+import { Mail, Phone } from "lucide-react";
 
 export default function DefaultMain({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [isVideoVisible, setIsVideoVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const videoContainerRef = useRef(null);
+  const [showFirstVideo, setShowFirstVideo] = useState(true);
 
   useEffect(() => {
-    // Check screen size on mount and when resizing
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
-    // Initial check
     checkScreenSize();
-    
-    // Add resize listener
-    window.addEventListener('resize', checkScreenSize);
-    
-    // Scroll handler
+    window.addEventListener("resize", checkScreenSize);
+
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      // Adjust scroll threshold based on screen size
-      const threshold = isMobile ? window.innerHeight / 3 : window.innerHeight / 2;
-      
-      if (scrollPosition > threshold) {
-        setIsVideoVisible(false);
-      } else {
-        setIsVideoVisible(true);
+      const threshold = isMobile
+        ? window.innerHeight / 3
+        : window.innerHeight / 2;
+
+      if (scrollPosition > threshold && showFirstVideo) {
+        setShowFirstVideo(false);
+      } else if (scrollPosition <= threshold && !showFirstVideo) {
+        setShowFirstVideo(true);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    
-    // Clean up
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', checkScreenSize);
+      window.removeEventListener("resize", checkScreenSize);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, [isMobile]);
+  }, [isMobile, showFirstVideo]);
 
   return (
-    <div className="relative flex flex-col min-h-screen">
-      {/* Video Background */}
-      {isVideoVisible && (
-        <div
-          ref={videoContainerRef}
-          className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden"
+    <div className="relative flex flex-col min-h-screen font-underdog">
+      {/* Video Backgrounds */}
+      <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
+        {/* First Video */}
+        <video
+          className={`absolute w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
+            showFirstVideo ? "opacity-100" : "opacity-0"
+          }`}
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="https://res.cloudinary.com/dgbreoalg/image/upload/v1747050845/Screenshot_1_luugsj.png"
         >
-          <video
-            className="absolute w-full h-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" // Placeholder until video loads
-          >
-            <source
-              src="https://res.cloudinary.com/dgbreoalg/video/upload/v1746533090/3129957-uhd_3840_2160_25fps_yzki9b.mp4"
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-          {/* Darker overlay for better text visibility on mobile */}
-          <div
-            className={`absolute inset-0 bg-black ${
-              isMobile ? "bg-opacity-70" : "bg-opacity-50"
-            }`}
-          ></div>
-        </div>
-      )}
+          <source
+            src="https://res.cloudinary.com/dgbreoalg/video/upload/v1746533090/3129957-uhd_3840_2160_25fps_yzki9b.mp4"
+            type="video/mp4"
+          />
+        </video>
 
-      {/* Original Content */}
+        {/* Second Video */}
+        <video
+          className={`absolute w-full h-full object-cover transition-opacity duration-500 ease-in-out ${
+            showFirstVideo ? "opacity-0" : "opacity-100"
+          }`}
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="https://res.cloudinary.com/dgbreoalg/image/upload/v1747050845/Screenshot_1_luugsj.png"
+        >
+          <source
+            src="https://res.cloudinary.com/dgbreoalg/video/upload/v1747055518/trimed_xcqkng.mp4"
+            type="video/mp4"
+          />
+        </video>
+
+        {/* Overlay for contrast */}
+        <div
+          className={`absolute inset-0 bg-black ${
+            isMobile ? "bg-opacity-70" : "bg-opacity-50"
+          }`}
+        ></div>
+      </div>
+
+      {/* Content & Footer Here */}
       <div className="relative z-10 flex flex-col min-h-screen">
         <Navbar />
         <main className="container mx-auto max-w-7xl px-3 space-y-6 md:px-6 flex-grow pt-12 md:pt-16">
           {children}
         </main>
+
+        {/* Footer CTA */}
         <footer className="w-full flex flex-col items-stretch justify-center pt-2 md:pt-3">
-          {/* CALL TO ACTION */}
           <div className="p-12 bg-gradient-to-r from-blue-900 to-purple-900 text-white">
             <div className="text-center max-w-3xl mx-auto">
               <h2 className="text-3xl font-bold mb-4">
@@ -101,18 +108,18 @@ export default function DefaultMain({
                   <span>Start Now</span>
                 </button>
                 <button className="bg-white text-green-600 hover:bg-gray-100 font-medium px-6 py-3 rounded-lg flex space-x-3 items-center">
-                  <Phone className="text-green-700"/>
+                  <Phone className="text-green-700" />
                   <span>Call On Phone</span>
                 </button>
                 <button className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg flex items-center">
-                  <Mail className=" mr-2" />
+                  <Mail className="mr-2" />
                   <span>hello@400brands.com</span>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* FOOTER */}
+          {/* Footer Info */}
           <div className="p-8 bg-gray-950 text-gray-400">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="flex items-center mb-4 md:mb-0">
@@ -144,12 +151,6 @@ export default function DefaultMain({
                 <a href="#">
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746726511/linkedin_tcu2e5.png"
-                    width={25}
-                  />
-                </a>
-                <a href="#">
-                  <img
-                    src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746726877/tiktok_ajbb4g.png"
                     width={25}
                   />
                 </a>

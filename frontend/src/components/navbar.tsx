@@ -55,19 +55,24 @@ export const Navbar = () => {
             color="foreground"
             href="/"
           >
-            <p className="font-bold text-2xl"><span className="text-primary">400</span>Brands</p>
+            <p className="font-bold text-2xl">
+              <span className="text-gradient-to-r from-blue-400 to-purple-500">
+                400
+              </span>
+              Brands
+            </p>
           </Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent>
-      <div className="hidden lg:flex gap-8 justify-start ml-2">
+        <div className="hidden lg:flex gap-8 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <Link
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  "data-[active=true]:text-primary data-[active=true]:font-medium"
                 )}
                 color="foreground"
                 href={item.href}
@@ -117,8 +122,8 @@ export const Navbar = () => {
                   index === 2
                     ? "primary"
                     : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
+                    ? "danger"
+                    : "foreground"
                 }
                 href="#"
                 size="lg"
