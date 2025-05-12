@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + HeroUI</title>
-    <meta key="title" content="Vite + HeroUI" property="og:title" />
+    <title>400Brands | Growth Partner for Future-Ready Brands</title>
+    <meta key="title" content="400Brands | From Idea to Execution" property="og:title" />
     <meta
-      content="Make beautiful websites regardless of your design experience."
+      content="We digitize, design, and drive growth for businesses, professionals, and rising brands with cutting-edge technology and strategy."
       property="og:description"
     />
     <meta
-      content="Make beautiful websites regardless of your design experience."
+      content="Your end-to-end growth partner offering SaaS development, AI integrations, digital marketing, and tech consultations."
       name="description"
     />
     <meta
@@ -19,10 +19,39 @@
       content="viewport-fit=cover, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
       name="viewport"
     />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://400brands.com" />
+    <meta property="og:image" content="https://400brands.com/og-image.jpg" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://400brands.com" />
+    <meta property="twitter:title" content="400Brands | Growth Partner for Future-Ready Brands" />
+    <meta
+      property="twitter:description"
+      content="From Idea to Execution - we blend strategy, design, engineering, and marketing to build world-class products."
+    />
+    <meta property="twitter:image" content="https://400brands.com/og-image.jpg" />
     <link href="/favicon.ico" rel="icon" />
+    
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="msapplication-TileColor" content="#0f172a" />
+    
+    <!-- Preconnect to important domains -->
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
-  <body>
+  <body class="bg-gray-950 text-gray-100 antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
   </body>
 </html>
