@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Mail, Phone } from "lucide-react";
+import { Preloader } from "./preloader";
 
 export default function DefaultMain({
   children,
@@ -32,6 +33,9 @@ export default function DefaultMain({
     };
 
     window.addEventListener("scroll", handleScroll);
+
+    // Note: Preloader component handles the overflow now
+
     return () => {
       window.removeEventListener("resize", checkScreenSize);
       window.removeEventListener("scroll", handleScroll);
@@ -40,6 +44,9 @@ export default function DefaultMain({
 
   return (
     <div className="relative flex flex-col min-h-screen font-underdog">
+      {/* Preloader */}
+      <Preloader />
+
       {/* Video Backgrounds */}
       <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
         {/* First Video */}
@@ -134,24 +141,28 @@ export default function DefaultMain({
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1725023787/instagram_jwzgzp.svg"
                     width={25}
+                    alt="Instagram"
                   />
                 </a>
                 <a href="#">
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746726813/whatsapp_xyz2jq.png"
                     width={25}
+                    alt="WhatsApp"
                   />
                 </a>
                 <a href="#">
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746726393/facebook_npnmeh.png"
                     width={25}
+                    alt="Facebook"
                   />
                 </a>
                 <a href="#">
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746726511/linkedin_tcu2e5.png"
                     width={25}
+                    alt="LinkedIn"
                   />
                 </a>
               </div>
