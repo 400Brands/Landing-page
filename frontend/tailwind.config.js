@@ -14,6 +14,7 @@ export default {
       fontFamily: {
         sans: ["Raleway", "ui-sans-serif", "system-ui"],
         underdog: ["Underdog", "sans-serif"],
+        ubuntu: ["Ubuntu"],
       },
     },
   },

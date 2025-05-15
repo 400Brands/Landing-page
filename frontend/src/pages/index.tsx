@@ -8,11 +8,9 @@ import {
   Star,
 } from "lucide-react";
 import { useState } from "react";
-import {
-  motion,
-  AnimatePresence
-} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "@heroui/link";
 
 // Animation variants
 const container = {
@@ -67,7 +65,6 @@ const staggerContainer = {
 export default function IndexPage() {
   const [currentWork, setCurrentWork] = useState(0);
   const ref = useRef(null);
-  
 
   const works = [
     {
@@ -147,21 +144,26 @@ export default function IndexPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <motion.button
-                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <span>Brand Doctor</span>
-                </motion.button>
-                <motion.button
-                  className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Headset className="w-4 h-4 mr-2" />
-                  <span>Book Free Consultation</span>
-                </motion.button>
+                <Link href="/bake">
+                  <motion.button
+                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <span>Brand Doctor</span>
+                  </motion.button>
+                </Link>
+
+                <Link isExternal href="https://wa.me/2347083519662">
+                  <motion.button
+                    className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Headset className="w-4 h-4 mr-2" />
+                    <span>Book Free Consultation</span>
+                  </motion.button>
+                </Link>
               </motion.div>
             </motion.div>
 
@@ -203,7 +205,15 @@ export default function IndexPage() {
         </motion.div>
       </section>
 
-      <section className="relative flex flex-col gap-6" ref={ref}>
+      <section
+        data-aos="zoom-in-up"
+        data-aos-offset="200"
+        data-aos-delay="50"
+        data-aos-duration="1000"
+        data-aos-once="false"
+        className="relative flex flex-col gap-6"
+        ref={ref}
+      >
         <motion.div
           className="py-10 md:py-10 relative z-0"
           initial="hidden"
@@ -320,7 +330,13 @@ export default function IndexPage() {
       </section>
 
       {/* OUR WORKS - DARK MODE */}
-      <section>
+      <section
+        data-aos="zoom-in-up"
+        data-aos-offset="200"
+        data-aos-delay="50"
+        data-aos-duration="1000"
+        data-aos-once="false"
+      >
         <motion.div
           className="p-12 bg-gray-950 text-gray-100 border border-gray-700 rounded-md"
           initial="hidden"
@@ -475,7 +491,13 @@ export default function IndexPage() {
         </motion.div>
       </section>
 
-      <section>
+      <section
+        data-aos="zoom-in-up"
+        data-aos-offset="200"
+        data-aos-delay="50"
+        data-aos-duration="1000"
+        data-aos-once="false"
+      >
         {/* PRICING PLANS - DARK MODE */}
         <motion.div
           className="py-12 text-gray-100"
@@ -723,9 +745,10 @@ export default function IndexPage() {
                   🛠️ Enterprise & Custom Builds
                 </h3>
                 <p className="max-w-2xl text-gray-200 font-sans">
-                  Need something unique? Web3 integrations, Business Specific AI, internal
-                  dashboards, or national campaigns? <b>Let's talk.</b> We'll
-                  build a custom package just for your needs.
+                  Need something unique? Web3 integrations, Business Specific
+                  AI, internal dashboards, or national campaigns?{" "}
+                  <b>Let's talk.</b> We'll build a custom package just for your
+                  needs.
                 </p>
               </div>
               <motion.button
@@ -741,7 +764,13 @@ export default function IndexPage() {
         </motion.div>
       </section>
 
-      <section>
+      <section
+        data-aos="zoom-in-up"
+        data-aos-offset="200"
+        data-aos-delay="50"
+        data-aos-duration="1000"
+        data-aos-once="false"
+      >
         {/* WHY 400BRANDS */}
         <motion.div
           className="py-12 text-gray-100"

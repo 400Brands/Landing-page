@@ -4,9 +4,9 @@ import DefaultMain from "@/layouts/defaultMain";
 export default function DocsPage() {
   return (
     <DefaultMain>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <section className="flex flex-col items-center justify-center gap-4 py-2 md:py-2 min-h-screen">
         <div className="inline-block max-w-lg text-center justify-center">
-          <h1 className={title()}>Docs</h1>
+          <h1 className={title()}>what we do... Coming Soon...</h1>
         </div>
       </section>
     </DefaultMain>

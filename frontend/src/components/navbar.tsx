@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Button } from "@heroui/button";
 import { Kbd } from "@heroui/kbd";
 import { Link } from "@heroui/link";
@@ -16,10 +18,7 @@ import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  GithubIcon,
-  SearchIcon,
-} from "@/components/icons";
+import { GithubIcon, SearchIcon } from "@/components/icons";
 import { PhoneCallIcon } from "lucide-react";
 
 export const Navbar = () => {
@@ -53,7 +52,7 @@ export const Navbar = () => {
             color="foreground"
             href="/"
           >
-            <p className="font-bold text-2xl">
+            <p className="font-bold text-2xl font-underdog">
               <span className="text-gradient-to-r from-blue-400 to-purple-500">
                 400
               </span>
@@ -95,6 +94,7 @@ export const Navbar = () => {
             as={Link}
             className="text-md font-bold text-default-600 bg-default-100"
             startContent={<PhoneCallIcon className="text-primary" />}
+            href="https://wa.me/2347083519662"
             variant="flat"
           >
             ContactUs

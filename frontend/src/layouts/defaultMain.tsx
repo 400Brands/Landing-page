@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Mail, Phone } from "lucide-react";
-import { Preloader } from "./preloader";
+import { Link } from "@heroui/link";
 
 export default function DefaultMain({
   children,
@@ -43,10 +43,7 @@ export default function DefaultMain({
   }, [isMobile, showFirstVideo]);
 
   return (
-    <div className="relative flex flex-col min-h-screen font-underdog">
-      {/* Preloader */}
-      <Preloader />
-
+    <div className="relative flex flex-col min-h-screen font-ubuntu">
       {/* Video Backgrounds */}
       <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
         {/* First Video */}
@@ -61,7 +58,7 @@ export default function DefaultMain({
           poster="https://res.cloudinary.com/dgbreoalg/image/upload/v1747050845/Screenshot_1_luugsj.png"
         >
           <source
-            src="https://res.cloudinary.com/dgbreoalg/video/upload/v1746533090/3129957-uhd_3840_2160_25fps_yzki9b.mp4"
+            src="https://res.cloudinary.com/dgbreoalg/video/upload/v1747322147/bg_video_Trim_exv34i.mp4"
             type="video/mp4"
           />
         </video>
@@ -116,7 +113,7 @@ export default function DefaultMain({
                 </button>
                 <button className="bg-white text-green-600 hover:bg-gray-100 font-medium px-6 py-3 rounded-lg flex space-x-3 items-center">
                   <Phone className="text-green-700" />
-                  <span>Call On Phone</span>
+                  <span>Call On WhatsApp</span>
                 </button>
                 <button className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg flex items-center">
                   <Mail className="mr-2" />
@@ -144,13 +141,13 @@ export default function DefaultMain({
                     alt="Instagram"
                   />
                 </a>
-                <a href="#">
+                <Link isExternal href="https://wa.me/2347083519662">
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746726813/whatsapp_xyz2jq.png"
                     width={25}
                     alt="WhatsApp"
                   />
-                </a>
+                </Link>
                 <a href="#">
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746726393/facebook_npnmeh.png"
