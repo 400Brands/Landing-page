@@ -12,6 +12,7 @@ import "aos/dist/aos.css";
 
 
 import { useEffect } from "react";
+import BrandDoctorPage from "./pages/bakeTheBrand";
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
       <Route element={<PricingPage />} path="/what_we_think" />
       <Route element={<BlogPage />} path="/who_we_are" />
       <Route element={<AboutPage />} path="/about" />
-      <Route element={<BakeTheBrandPage />} path="/bake" />
+      <Route element={<BrandDoctorPage />} path="/bake" />
     </Routes>
   );
 }

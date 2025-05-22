@@ -11,6 +11,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
 import { Link } from "@heroui/link";
+import { TypeAnimation } from "react-type-animation";
 
 // Animation variants
 const container = {
@@ -146,7 +147,7 @@ export default function IndexPage() {
               >
                 <Link href="/bake">
                   <motion.button
-                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
+                    className="bg-gradient-to-r from-blue-600 to-purple-500 text-black font-medium px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -174,6 +175,7 @@ export default function IndexPage() {
               transition={{ duration: 1, delay: 0.5 }}
             >
               {/* Animated decorative elements can be added here */}
+              
             </motion.div>
           </div>
         </motion.div>
@@ -185,22 +187,32 @@ export default function IndexPage() {
           transition={{ delay: 1.2, duration: 1 }}
         >
           <p className="font-sans">
-            We blend <b>strategy, design, engineering, and marketing</b> <br />{" "}
-            to turn your ideas into world-class product
-            <br /> just starting or scaling —{" "}
-            <motion.span
-              className="text-primary font-underdog"
-              animate={{
-                color: ["#3b82f6", "#ec4899", "#f59e0b", "#3b82f6"],
+            <TypeAnimation
+              sequence={[
+                "400Brands",
+                2000,
+                "400Products",
+                2000,
+                "400Successes",
+                2000,
+                "400Solutions",
+                2000,
+                "400Brands",
+                2000,
+              ]}
+              speed={30}
+              deletionSpeed={50}
+              style={{
+                display: "inline-block",
+                color: "#3b82f6", // blue-500
+                fontFamily: '"Underdog", cursive',
               }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                repeatType: "reverse",
-              }}
-            >
-              400Brands
-            </motion.span>
+              wrapper="span"
+              repeat={Infinity}
+            />{" "}
+            — We blend <b>strategy, design, engineering, and marketing</b>{" "}
+            <br /> to turn your ideas into world-class product
+            <br /> just starting or scaling
           </p>
         </motion.div>
       </section>
