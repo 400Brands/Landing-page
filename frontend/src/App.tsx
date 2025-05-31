@@ -5,7 +5,6 @@ import DocsPage from "@/pages/docs";
 import PricingPage from "@/pages/pricing";
 import BlogPage from "@/pages/blog";
 import AboutPage from "@/pages/about";
-import BakeTheBrandPage from "./pages/bakeTheBrand";
 
 import AOS from "aos";
 import "aos/dist/aos.css";

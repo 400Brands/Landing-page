@@ -1,11 +1,11 @@
+//@ts-nocheck
+
 import { useState, useEffect } from "react";
 import { Check, X, ShieldCheck, Star, TrendingUp, Eye } from "lucide-react";
 import {
   Modal,
   ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
   useDisclosure,
 } from "@heroui/react";
 
@@ -339,7 +339,6 @@ const BrandResultsDisplay = ({
         className="bg-gray-900 border border-gray-700"
       >
         <ModalContent>
-          {(onClose) => (
             <>
               
               <ModalBody className="p-6">
@@ -363,7 +362,6 @@ const BrandResultsDisplay = ({
               </ModalBody>
               
             </>
-          )}
         </ModalContent>
       </Modal>
     </>

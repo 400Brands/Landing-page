@@ -1,9 +1,6 @@
 import { useState } from "react";
 import {
   Check,
-  Heart,
-  Headphones,
-  Phone,
   AlertCircle,
   ArrowUpRight,
   ArrowRight,
