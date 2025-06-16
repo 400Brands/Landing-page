@@ -14,7 +14,7 @@ export default function BrandDoctorPage() {
   const [score, setScore] = useState(0);
   const [medal, setMedal] = useState("");
 
-  const handleAnalysis = (inputBrandName: string, inputIndustry: string) => {
+   const handleAnalysis = (inputBrandName: string, inputIndustry: string) => {
     setBrandName(inputBrandName);
     setIndustry(inputIndustry);
     setIsAnalyzing(true);

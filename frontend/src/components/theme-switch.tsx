@@ -4,7 +4,7 @@ import { SwitchProps, useSwitch } from "@heroui/switch";
 import clsx from "clsx";
 import { useTheme } from "@heroui/use-theme";
 
-import { Headphones } from "lucide-react";
+import { SunFilledIcon, MoonFilledIcon } from "@/components/icons";
 
 export interface ThemeSwitchProps {
   className?: string;
@@ -27,8 +27,8 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
     getInputProps,
     getWrapperProps,
   } = useSwitch({
-    isSelected: theme === "dark",
-    onChange: () => setTheme(theme === "dark" ? "dark" : "dark"),
+    isSelected: theme === "light",
+    onChange: () => setTheme(theme === "light" ? "light" : "light"),
   });
 
   useEffect(() => {
@@ -40,12 +40,12 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
 
   return (
     <Component
-      aria-label={isSelected ? "Switch to dark mode" : "Switch to dark mode"}
+      aria-label={isSelected ? "Switch to dark mode" : "Switch to light mode"}
       {...getBaseProps({
         className: clsx(
           "px-px transition-opacity hover:opacity-80 cursor-pointer",
           className,
-          classNames?.base,
+          classNames?.base
         ),
       })}
     >
@@ -67,11 +67,15 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
               "px-0",
               "mx-0",
             ],
-            classNames?.wrapper,
+            classNames?.wrapper
           ),
         })}
       >
-       <Headphones/>
+        {isSelected ? (
+          <MoonFilledIcon size={22} />
+        ) : (
+          <SunFilledIcon size={22} />
+        )}
       </div>
     </Component>
   );

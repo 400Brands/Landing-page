@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { HeartPulse, CheckIcon } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 // Animation variants
 const fadeIn = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.8 } },
 };
-
 
 const scaleUp = {
   hidden: { scale: 0.9, opacity: 0 },
@@ -28,12 +28,73 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
   isAnalyzing,
 }) => {
   const [brandName, setBrandName] = useState("");
+  const [autoAnalyzing, setAutoAnalyzing] = useState(false);
   const industry = "online";
+  const location = useLocation();
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const brandParam = queryParams.get("brand");
+
+    if (brandParam?.trim()) {
+      const decodedBrand = decodeURIComponent(brandParam);
+      setBrandName(decodedBrand);
+      setAutoAnalyzing(true);
+      onAnalysis(decodedBrand, industry);
+    }
+  }, [location.search, onAnalysis]);
 
   const handleSubmit = () => {
     if (!brandName.trim() || !industry) return;
     onAnalysis(brandName, industry);
   };
+
+  // Show loading overlay if auto-analyzing
+  if (autoAnalyzing && isAnalyzing) {
+    return (
+      <motion.div
+        className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-50 flex items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <motion.div
+          className="bg-gray-800 p-8 rounded-xl max-w-md w-full mx-4 border border-gray-700"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="flex flex-col items-center text-center space-y-4">
+            <div className="relative">
+              <HeartPulse className="w-12 h-12 text-blue-400 animate-pulse" />
+              <motion.div
+                className="absolute inset-0 rounded-full border-4 border-blue-400 border-t-transparent"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              />
+            </div>
+            <h3 className="text-xl font-bold text-white">
+              Analyzing Your Brand
+            </h3>
+            <p className="text-gray-300">
+              We're examining{" "}
+              <span className="font-semibold text-blue-300">{brandName}</span>{" "}
+              across the web
+            </p>
+            <div className="w-full bg-gray-700 rounded-full h-2.5 mt-4">
+              <motion.div
+                className="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -42,7 +103,6 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
       animate="visible"
       variants={fadeIn}
     >
-
       {/* Form Section */}
       <motion.div className="max-w-3xl mx-auto" variants={scaleUp}>
         <motion.div
@@ -61,9 +121,7 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
               <HeartPulse className="w-6 h-6 text-blue-300" />
             </motion.div>
             <div>
-              <h2 className="text-2xl font-bold text-white">
-                Brands Doctor
-              </h2>
+              <h2 className="text-2xl font-bold text-white">Brands Doctor</h2>
               <p className="text-gray-400">
                 Test your brand's online health and get expert recommendations
               </p>

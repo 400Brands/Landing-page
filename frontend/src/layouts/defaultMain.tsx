@@ -3,14 +3,16 @@ import { useEffect, useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Mail, Phone } from "lucide-react";
 import { Link } from "@heroui/link";
+import { useNavigate } from "react-router-dom";
 
-export default function DefaultMain({
-  children,
-}: {
+interface DefaultMainProps {
   children: React.ReactNode;
-}) {
+}
+
+export default function DefaultMain({ children }: DefaultMainProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [showFirstVideo, setShowFirstVideo] = useState(true);
+  const navigate = useNavigate(); // Moved inside the component
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -34,13 +36,19 @@ export default function DefaultMain({
 
     window.addEventListener("scroll", handleScroll);
 
-    // Note: Preloader component handles the overflow now
-
     return () => {
       window.removeEventListener("resize", checkScreenSize);
       window.removeEventListener("scroll", handleScroll);
     };
   }, [isMobile, showFirstVideo]);
+
+  const handleWhatsApp = () => {
+    window.open(`https://wa.me/2347083519662`, "_blank"); // Better to use window.open for external links
+  };
+
+  const handleEmail = () => {
+    window.location.href = "mailto:hello@400brands.com";
+  };
 
   return (
     <div className="relative flex flex-col min-h-screen font-ubuntu">
@@ -108,14 +116,23 @@ export default function DefaultMain({
               </p>
 
               <div className="flex flex-wrap justify-center gap-4">
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-6 py-3 rounded-lg flex items-center">
+                <button
+                  onClick={() => navigate("/bake")}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-6 py-3 rounded-lg flex items-center"
+                >
                   <span>Start Now</span>
                 </button>
-                <button className="bg-white text-green-600 hover:bg-gray-100 font-medium px-6 py-3 rounded-lg flex space-x-3 items-center">
+                <button
+                  onClick={handleWhatsApp}
+                  className="bg-white text-green-600 hover:bg-gray-100 font-medium px-6 py-3 rounded-lg flex space-x-3 items-center"
+                >
                   <Phone className="text-green-700" />
                   <span>Call On WhatsApp</span>
                 </button>
-                <button className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg flex items-center">
+                <button
+                  onClick={handleEmail}
+                  className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg flex items-center"
+                >
                   <Mail className="mr-2" />
                   <span>hello@400brands.com</span>
                 </button>
@@ -134,7 +151,11 @@ export default function DefaultMain({
               </div>
 
               <div className="flex space-x-6">
-                <a href="#">
+                <a
+                  href="https://www.instagram.com/400brands/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1725023787/instagram_jwzgzp.svg"
                     width={25}
@@ -148,14 +169,18 @@ export default function DefaultMain({
                     alt="WhatsApp"
                   />
                 </Link>
-                <a href="#">
+                <a href="#" target="_blank" rel="noopener noreferrer">
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746726393/facebook_npnmeh.png"
                     width={25}
                     alt="Facebook"
                   />
                 </a>
-                <a href="#">
+                <a
+                  href="https://www.linkedin.com/company/400brands/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <img
                     src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746726511/linkedin_tcu2e5.png"
                     width={25}

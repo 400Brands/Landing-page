@@ -7,11 +7,13 @@ import {
   Phone,
   Star,
 } from "lucide-react";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
 import { Link } from "@heroui/link";
 import { TypeAnimation } from "react-type-animation";
+import BrandAnalysisForm from "@/components/BrandAnalysisForm";
+import { LinkProps } from "react-router-dom";
 
 // Animation variants
 const container = {
@@ -70,6 +72,7 @@ export default function IndexPage() {
   const works = [
     {
       name: "Promotionalproductsnow",
+      image1: "https://res.cloudinary.com/dgbreoalg/image/upload/v1750091518/promotional_irhlrv.jpg",
       image:
         "https://res.cloudinary.com/dgbreoalg/image/upload/v1746718752/pro_bj1wxu.jpg",
       desc: "Website, WhatsApp bot, and Google visibility (from 12 bookings/month → 80+)",
@@ -105,6 +108,28 @@ export default function IndexPage() {
 
   const prevWork = () => {
     setCurrentWork((prev) => (prev - 1 + works.length) % works.length);
+  };
+
+
+  interface HashLinkProps extends LinkProps {
+    children: ReactNode;
+  }
+
+   const HashLink = ({ to, children, ...props }: HashLinkProps) => {
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      const targetId = to.toString().replace("#", "");
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+
+    return (
+      <Link to={to} onClick={handleClick} {...props}>
+        {children}
+      </Link>
+    );
   };
 
   return (
@@ -145,7 +170,7 @@ export default function IndexPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <Link href="/bake">
+                <HashLink to="#brandDoctor">
                   <motion.button
                     className="bg-gradient-to-r from-blue-600 to-purple-500 text-black font-medium px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
                     whileHover={{ scale: 1.05 }}
@@ -153,7 +178,7 @@ export default function IndexPage() {
                   >
                     <span>Brand Doctor</span>
                   </motion.button>
-                </Link>
+                </HashLink>
 
                 <Link isExternal href="https://wa.me/2347083519662">
                   <motion.button
@@ -175,7 +200,6 @@ export default function IndexPage() {
               transition={{ duration: 1, delay: 0.5 }}
             >
               {/* Animated decorative elements can be added here */}
-              
             </motion.div>
           </div>
         </motion.div>
@@ -214,6 +238,57 @@ export default function IndexPage() {
             <br /> to turn your ideas into world-class product
             <br /> just starting or scaling
           </p>
+        </motion.div>
+      </section>
+
+      {/* Brand Doctor aesthetic 1 input form that Routes to /D with the input value */}
+      {/* Brand Doctor Section */}
+      <section
+        id="brandDoctor"
+        className="py-16 md:py-24 bg-gradient-to-b from-gray-900 to-gray-950"
+      >
+        <motion.div
+          className="container mx-auto px-4"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeIn}
+        >
+          <motion.div className="text-center mb-12" variants={slideUp}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+              Brand Doctor Diagnosis
+            </h2>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Get a free instant analysis of your brand's digital health and
+              discover growth opportunities in under 30 seconds.
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="max-w-2xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gray-700 shadow-lg"
+            variants={scaleUp}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-blue-500/10 rounded-full">
+                <Star className="w-5 h-5 text-blue-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-white">
+                What's your brand's name?
+              </h3>
+            </div>
+
+            <BrandAnalysisForm />
+
+            <motion.div
+              className="mt-6 flex items-center gap-2 text-sm text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Check className="w-4 h-4 text-green-400" />
+              <span>Privacy-first analysis. We never store your data.</span>
+            </motion.div>
+          </motion.div>
         </motion.div>
       </section>
 
@@ -342,6 +417,7 @@ export default function IndexPage() {
       </section>
 
       {/* OUR WORKS - DARK MODE */}
+      {/* OUR WORKS - DARK MODE - COMPACT */}
       <section
         data-aos="zoom-in-up"
         data-aos-offset="200"
@@ -350,30 +426,30 @@ export default function IndexPage() {
         data-aos-once="false"
       >
         <motion.div
-          className="p-12 bg-gray-950 text-gray-100 border border-gray-700 rounded-md"
+          className="p-8 bg-gray-950 text-gray-100 border border-gray-700 rounded-md"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={fadeIn}
         >
           <motion.h2
-            className="text-3xl font-bold mb-2 text-center"
+            className="text-3xl font-bold mb-1 text-center"
             variants={slideUp}
           >
             Our Works
           </motion.h2>
           <motion.p
-            className="text-center mb-12 text-xl text-gray-300"
+            className="text-center mb-8 text-xl text-gray-300"
             variants={slideUp}
           >
             Real Brands. Real Results.
           </motion.p>
 
           <motion.div className="relative" variants={scaleUp}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-2xl font-medium flex items-center text-gray-100">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xl font-medium flex items-center text-gray-100">
                 <motion.span
-                  className="text-4xl mr-3"
+                  className="text-3xl mr-3"
                   whileHover={{ scale: 1.05 }}
                 >
                   {typeof works[currentWork].icon === "string" &&
@@ -381,7 +457,7 @@ export default function IndexPage() {
                     <motion.img
                       src={works[currentWork].icon}
                       alt="Brand icon"
-                      width={150}
+                      width={120}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       key={currentWork}
@@ -398,7 +474,7 @@ export default function IndexPage() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <ArrowBigLeft className="w-5 h-5" />
+                  <ArrowBigLeft className="w-4 h-4" />
                 </motion.button>
                 <motion.button
                   onClick={nextWork}
@@ -406,7 +482,7 @@ export default function IndexPage() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <ArrowBigRight className="w-5 h-5" />
+                  <ArrowBigRight className="w-4 h-4" />
                 </motion.button>
               </div>
             </div>
@@ -420,20 +496,55 @@ export default function IndexPage() {
                 exit={{ opacity: 0, x: -100 }}
                 transition={{ duration: 0.5 }}
               >
-                <div className="aspect-video bg-slate-950 w-full relative overflow-hidden">
-                  <motion.img
-                    src={works[currentWork].image}
-                    alt={works[currentWork].desc}
-                    className="w-full h-full object-contain"
+                <div className="aspect-[16/6] bg-slate-950 w-full relative overflow-hidden grid grid-cols-2 grid-rows-2 gap-0">
+                  {/* Left half (full height) */}
+                  <motion.div
+                    className="col-span-1 row-span-2 relative overflow-hidden"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                  />
+                  >
+                    <img
+                      src={works[currentWork].image1}
+                      alt={works[currentWork].desc}
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.div>
+
+                  {/* Top right quarter */}
+                  <motion.div
+                    className="col-span-1 row-span-1 relative overflow-hidden border-l  border-b border-gray-700"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <img
+                      src={works[currentWork].image}
+                      alt={works[currentWork].desc}
+                      className="w-full h-full object-contain bg-white"
+                      
+                    />
+                  </motion.div>
+
+                  {/* Bottom right quarter */}
+                  <motion.div
+                    className="col-span-1 row-span-1 relative overflow-hidden border-l border-gray-700"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <img
+                      src={works[currentWork].image}
+                      alt={works[currentWork].desc}
+                      className="w-full h-full object-cover"
+                      style={{ objectPosition: "right bottom" }}
+                    />
+                  </motion.div>
                 </div>
-                <div className="p-6">
-                  <div className="flex items-center mb-4">
+                <div className="p-4">
+                  <div className="flex items-center mb-3">
                     <motion.div
-                      className="w-12 h-12 rounded-full border-1 border-blue-900 flex items-center justify-center text-2xl mr-4 text-blue-300 overflow-hidden"
+                      className="w-10 h-10 rounded-full border-1 border-blue-900 flex items-center justify-center text-xl mr-3 text-blue-300 overflow-hidden"
                       whileHover={{ scale: 1.1 }}
                     >
                       <img
@@ -443,7 +554,7 @@ export default function IndexPage() {
                       />
                     </motion.div>
                     <div>
-                      <h4 className="font-bold text-gray-100">
+                      <h4 className="font-bold text-gray-100 text-sm">
                         {works[currentWork].name}
                       </h4>
                       <div className="flex">
@@ -453,14 +564,14 @@ export default function IndexPage() {
                             whileHover={{ scale: 1.3 }}
                             whileTap={{ scale: 0.8 }}
                           >
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                           </motion.div>
                         ))}
                       </div>
                     </div>
                   </div>
                   <motion.p
-                    className="italic text-gray-400"
+                    className="italic text-gray-400 text-sm mb-2"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
@@ -469,7 +580,7 @@ export default function IndexPage() {
                     been incredible!"
                   </motion.p>
                   <motion.p
-                    className="mt-4 text-blue-300 font-medium"
+                    className="text-blue-300 font-medium text-sm"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7 }}
@@ -480,7 +591,7 @@ export default function IndexPage() {
               </motion.div>
             </AnimatePresence>
 
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-center mt-4">
               {works.map((_, idx) => (
                 <motion.button
                   key={idx}
