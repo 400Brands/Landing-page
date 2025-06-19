@@ -15,7 +15,6 @@ import { useRef } from "react";
 import { Link } from "@heroui/link";
 import { TypeAnimation } from "react-type-animation";
 import BrandAnalysisForm from "@/components/BrandAnalysisForm";
-import { LinkProps } from "react-router-dom";
 import { works } from "@/constant";
 
 // Animation variants
