@@ -1,9 +1,13 @@
+//@ts-nocheck
+
 import DefaultMain from "@/layouts/defaultMain";
 import {
   ArrowBigLeft,
   ArrowBigRight,
   Check,
+  Flame,
   Headset,
+  Heart,
   Phone,
   Star,
 } from "lucide-react";
@@ -14,6 +18,7 @@ import { Link } from "@heroui/link";
 import { TypeAnimation } from "react-type-animation";
 import BrandAnalysisForm from "@/components/BrandAnalysisForm";
 import { LinkProps } from "react-router-dom";
+import { works } from "@/constant";
 
 // Animation variants
 const container = {
@@ -68,39 +73,6 @@ const staggerContainer = {
 export default function IndexPage() {
   const [currentWork, setCurrentWork] = useState(0);
   const ref = useRef(null);
-
-  const works = [
-    {
-      name: "Promotionalproductsnow",
-      image1: "https://res.cloudinary.com/dgbreoalg/image/upload/v1750091518/promotional_irhlrv.jpg",
-      image:
-        "https://res.cloudinary.com/dgbreoalg/image/upload/v1746718752/pro_bj1wxu.jpg",
-      desc: "Website, WhatsApp bot, and Google visibility (from 12 bookings/month → 80+)",
-      icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746716076/logo-CEQPpPRZ_p5otwz.png",
-      avatar: "https://avatar.iran.liara.run/public",
-    },
-    {
-      name: "ClevaHq",
-      image:
-        "https://res.cloudinary.com/dgbreoalg/image/upload/v1746719104/cmm_kiwctc.jpg",
-      desc: "Mobile app + influencer campaign = 3x consultation growth",
-      icon: "https://clevahq.com/clevaLogo.svg",
-    },
-    {
-      name: "Defrankfurtglobal",
-      image:
-        "https://res.cloudinary.com/dgbreoalg/image/upload/v1746719449/defrank_y2gyxf.jpg",
-      desc: "Marketplace setup, social media, and AI pricing engine",
-      icon: "https://www.defrankfurtglobal.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo.ec8a5c02.png&w=256&q=75",
-    },
-    {
-      name: "londonhotel&apartments",
-      image:
-        "https://res.cloudinary.com/dgbreoalg/image/upload/v1746718256/london_glixpi.jpg",
-      desc: "Full-stack digital suite, SEO blog, and thought leadership content",
-      icon: "https://jnoznbd6y3.ufs.sh/f/PKy8oE1GN2J3pe5blUVwi394rogIqdXzW56n8bYJTPQ1MAjv",
-    },
-  ];
 
   const nextWork = () => {
     setCurrentWork((prev) => (prev + 1) % works.length);
@@ -242,7 +214,6 @@ export default function IndexPage() {
       </section>
 
       {/* Brand Doctor aesthetic 1 input form that Routes to /D with the input value */}
-      {/* Brand Doctor Section */}
       <section
         id="brandDoctor"
         className="py-16 md:py-24 bg-gradient-to-b from-gray-900 to-gray-950"
@@ -416,7 +387,6 @@ export default function IndexPage() {
         </motion.div>
       </section>
 
-      {/* OUR WORKS - DARK MODE */}
       {/* OUR WORKS - DARK MODE - COMPACT */}
       <section
         data-aos="zoom-in-up"
@@ -522,7 +492,6 @@ export default function IndexPage() {
                       src={works[currentWork].image}
                       alt={works[currentWork].desc}
                       className="w-full h-full object-contain bg-white"
-                      
                     />
                   </motion.div>
 
@@ -548,7 +517,7 @@ export default function IndexPage() {
                       whileHover={{ scale: 1.1 }}
                     >
                       <img
-                        src={"https://avatar.iran.liara.run/public"}
+                        src={works[currentWork].avatar}
                         alt="Brand icon"
                         className="w-full h-full object-contain"
                       />
@@ -643,6 +612,21 @@ export default function IndexPage() {
           </motion.p>
 
           <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Choose Your Growth Path
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              Built on Brian Chesky's philosophy of creating 10-star experiences
+              that turn customers into lifelong advocates
+            </p>
+          </motion.div>
+
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
             variants={staggerContainer}
             initial="hidden"
@@ -659,7 +643,9 @@ export default function IndexPage() {
                 className="p-6 bg-gradient-to-br from-slate-900 to-gray-950 border-b border-gray-700"
                 whileHover={{ scale: 1.02 }}
               >
-                <h3 className="text-2xl font-bold mb-1">🔹 Starter Kit</h3>
+                <h3 className="text-2xl font-bold mb-1 flex flex-row gap-2">
+                  <Flame className="text-blue-500" /> Starter Kit
+                </h3>
                 <div className="flex items-end">
                   <motion.span
                     className="text-3xl font-bold"
@@ -683,41 +669,48 @@ export default function IndexPage() {
               <div className="p-6">
                 <ul className="space-y-3 text-gray-300">
                   {[
-                    "1-page website",
-                    "WhatsApp biz setup",
-                    "Social media audit",
-                    "1-hour tech strategy call",
+                    "1-Page Premium Website (Custom Domain Included for 1 Year)",
+                    "AI-Powered Chatbot for Instant Customer Engagement",
+                    "Complete SEO Optimization (Rank Ready from Day 1)",
+                    "30-Min Brand Strategy Call with Growth Expert",
+                    "Basic Analytics Setup to Track Your Success",
+                    "Mobile-Optimized Design That Converts",
+                    "Lifetime Security Updates",
                   ].map((feature, idx) => (
                     <motion.li
                       key={idx}
-                      className="flex items-center"
+                      className="flex items-start"
                       whileHover={{ x: 5 }}
                     >
-                      <motion.div whileHover={{ scale: 1.2 }}>
-                        <Check className="w-5 h-5 text-green-400 mr-2" />
+                      <motion.div
+                        whileHover={{ scale: 1.2 }}
+                        className="mt-0.5"
+                      >
+                        <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0" />
                       </motion.div>
-                      <span>{feature}</span>
+                      <span className="text-sm">{feature}</span>
                     </motion.li>
                   ))}
                 </ul>
+
                 <motion.button
-                  className="w-full mt-6 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium py-3 rounded-lg"
+                  className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium py-3 rounded-lg"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Get Started
+                  Launch Your Digital Presence →
                 </motion.button>
               </div>
             </motion.div>
 
             {/* Growth Bundle */}
             <motion.div
-              className="border-2 border-blue-500 rounded-xl overflow-hidden shadow-lg relative bg-gray-800"
+              className="border-2 border-emerald-500 rounded-xl overflow-hidden shadow-lg relative bg-gray-800"
               variants={item}
               whileHover={{ y: -10 }}
             >
               <motion.div
-                className="absolute top-0 right-0 bg-blue-600 text-white text-xs px-3 py-1 rounded-bl-lg"
+                className="absolute top-0 right-0 bg-emerald-600 text-white text-xs px-3 py-1 rounded-bl-lg"
                 animate={{
                   scale: [1, 1.1, 1],
                   transition: {
@@ -730,10 +723,13 @@ export default function IndexPage() {
                 POPULAR
               </motion.div>
               <motion.div
-                className="p-6 bg-gradient-to-br from-slate-900 to-gray-950 border-b border-blue-800"
+                className="p-6 bg-gradient-to-br from-emerald-900 to-teal-950 border-b border-emerald-800"
                 whileHover={{ scale: 1.02 }}
               >
-                <h3 className="text-2xl font-bold mb-1">🔸 Growth Bundle</h3>
+                <h3 className="text-2xl font-bold mb-1 flex flex-row gap-2">
+                  {" "}
+                  <Heart className="text-[#FF0098]" /> Growth Bundle
+                </h3>
                 <div className="flex items-end">
                   <motion.span
                     className="text-3xl font-bold"
@@ -757,30 +753,38 @@ export default function IndexPage() {
               <div className="p-6">
                 <ul className="space-y-3 text-gray-300">
                   {[
-                    "5-page website or landing funnel",
-                    "1 AI WhatsApp bot",
-                    "1 month social media management",
-                    "Basic SEO + Google Business setup",
-                    "2 strategy calls + monthly report",
+                    "Multi-Page Website (5 Pages) + E-commerce Ready",
+                    "Advanced AI Assistant with Lead Qualification",
+                    "Social Media Automation (3 Platforms)",
+                    "Email Marketing Sequences (Welcome + Nurture Series)",
+                    "Advanced Analytics Dashboard with Conversion Tracking",
+                    "Custom Brand Kit (Logo, Colors, Typography Guide)",
+                    "Speed Optimization (3-Second Load Time Guarantee)",
+                    "API Integrations (CRM, Payment, Social Proof)",
+                    "Monthly Strategy & Optimization Call (3 Months)",
                   ].map((feature, idx) => (
                     <motion.li
                       key={idx}
-                      className="flex items-center"
+                      className="flex items-start"
                       whileHover={{ x: 5 }}
                     >
-                      <motion.div whileHover={{ scale: 1.2 }}>
-                        <Check className="w-5 h-5 text-blue-400 mr-2" />
+                      <motion.div
+                        whileHover={{ scale: 1.2 }}
+                        className="mt-0.5"
+                      >
+                        <Check className="w-5 h-5 text-emerald-400 mr-2 flex-shrink-0" />
                       </motion.div>
-                      <span>{feature}</span>
+                      <span className="text-sm">{feature}</span>
                     </motion.li>
                   ))}
                 </ul>
+
                 <motion.button
-                  className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg"
+                  className="w-full mt-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium py-3 rounded-lg"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Get Started
+                  Accelerate Your Growth →
                 </motion.button>
               </div>
             </motion.div>
@@ -792,11 +796,12 @@ export default function IndexPage() {
               whileHover={{ y: -10 }}
             >
               <motion.div
-                className="p-6 bg-gradient-to-br from-slate-900 to-gray-950 border-b border-gray-700"
+                className="p-6 bg-gradient-to-br from-purple-900 to-indigo-950 border-b border-gray-700"
                 whileHover={{ scale: 1.02 }}
               >
-                <h3 className="text-2xl font-bold mb-1">
-                  🌟 Brand Master Plan
+                <h3 className="text-2xl font-bold mb-1 flex flex-row gap-2 ">
+                  <Star className="text-yellow-500" />
+                  Brand Master Plan
                 </h3>
                 <div className="flex items-end">
                   <motion.span
@@ -821,30 +826,41 @@ export default function IndexPage() {
               <div className="p-6">
                 <ul className="space-y-3 text-gray-300">
                   {[
-                    "Full website or mobile app",
-                    "AI & automation workflows",
-                    "3-month content & marketing plan",
-                    "Custom design pack (logo, templates)",
-                    "Monthly consulting + reviews",
+                    "Unlimited Pages + Custom Web Application",
+                    "AI-Powered Customer Journey Optimization",
+                    "Omnichannel Marketing Automation (All Major Platforms)",
+                    "Advanced Email Marketing with Behavioral Triggers",
+                    "Enterprise Analytics Suite with Predictive Insights",
+                    "Complete Brand Identity Package + Style Guide",
+                    "Enterprise CDN + 99.9% Uptime SLA",
+                    "Advanced Security Suite + Compliance Ready",
+                    "Dedicated Account Manager + Weekly Strategy Sessions",
+                    "A/B Testing Platform for Continuous Optimization",
+                    "Custom Integrations + API Development",
+                    "Native Mobile App Development (iOS + Android)",
                   ].map((feature, idx) => (
                     <motion.li
                       key={idx}
-                      className="flex items-center"
+                      className="flex items-start"
                       whileHover={{ x: 5 }}
                     >
-                      <motion.div whileHover={{ scale: 1.2 }}>
-                        <Check className="w-5 h-5 text-green-400 mr-2" />
+                      <motion.div
+                        whileHover={{ scale: 1.2 }}
+                        className="mt-0.5"
+                      >
+                        <Check className="w-5 h-5 text-purple-400 mr-2 flex-shrink-0" />
                       </motion.div>
-                      <span>{feature}</span>
+                      <span className="text-sm">{feature}</span>
                     </motion.li>
                   ))}
                 </ul>
+
                 <motion.button
-                  className="w-full mt-6 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium py-3 rounded-lg"
+                  className="w-full mt-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium py-3 rounded-lg"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Get Started
+                  Dominate Your Market →
                 </motion.button>
               </div>
             </motion.div>

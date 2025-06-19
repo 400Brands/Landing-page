@@ -6,7 +6,7 @@ export const siteConfig = {
   navItems: [
     {
       label: "What we do",
-      href: "/docs",
+      href: "/what_we_do",
     },
     {
       label: "What we think",
@@ -18,13 +18,13 @@ export const siteConfig = {
     },
     {
       label: "Careers",
-      href: "/about",
+      href: "/careers",
     },
   ],
   navMenuItems: [
     {
       label: "What we do",
-      href: "/docs",
+      href: "/what_we_do",
     },
     {
       label: "What we think",
@@ -36,8 +36,8 @@ export const siteConfig = {
     },
     {
       label: "Careers",
-      href: "/about",
-    }
+      href: "/careers",
+    },
   ],
   links: {
     twitter: "https://twitter.com/hero_ui",

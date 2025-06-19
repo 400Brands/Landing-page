@@ -2,12 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Check, X, ShieldCheck, Star, TrendingUp, Eye } from "lucide-react";
-import {
-  Modal,
-  ModalContent,
-  ModalBody,
-  useDisclosure,
-} from "@heroui/react";
+import { Modal, ModalContent, ModalBody, useDisclosure } from "@heroui/react";
 
 interface BrandResultsDisplayProps {
   brandName: string;
@@ -25,6 +20,43 @@ const BrandResultsDisplay = ({
   const [displayScore, setDisplayScore] = useState(0);
   const [animationComplete, setAnimationComplete] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  // Dynamic styling based on score
+  const getScoreBasedStyling = (score: number) => {
+    if (score >= 85) {
+      return {
+        bgColor: "bg-green-900",
+        border: "border-green-500/40",
+        shadow: "shadow-green-500/20",
+      };
+    } else if (score >= 75) {
+      return {
+        bgColor: "bg-blue-900",
+        border: "border-blue-500/40",
+        shadow: "shadow-blue-500/20",
+      };
+    } else if (score >= 60) {
+      return {
+        bgColor: "bg-yellow-900",
+        border: "border-yellow-500/40",
+        shadow: "shadow-yellow-500/20",
+      };
+    } else if (score >= 45) {
+      return {
+        bgColor: "bg-orange-900",
+        border: "border-orange-500/40",
+        shadow: "shadow-orange-500/20",
+      };
+    } else {
+      return {
+        bgColor: "bg-red-900",
+        border: "border-red-500/40",
+        shadow: "shadow-red-500/20",
+      };
+    }
+  };
+
+  const scoreStyles = getScoreBasedStyling(score);
 
   // Optimized counter animation
   useEffect(() => {
@@ -120,7 +152,13 @@ const BrandResultsDisplay = ({
   const strokeDasharray = circumference;
   const strokeDashoffset = circumference - (displayScore / 100) * circumference;
 
-  const MetricSection = ({ title, benchmarks, icon, bgColor, borderColor }: any) => (
+  const MetricSection = ({
+    title,
+    benchmarks,
+    icon,
+    bgColor,
+    borderColor,
+  }: any) => (
     <div
       className={`bg-gradient-to-br ${bgColor} rounded-xl border ${borderColor} overflow-hidden`}
     >
@@ -150,14 +188,14 @@ const BrandResultsDisplay = ({
                     benchmark.score >= 80
                       ? "#10B981"
                       : benchmark.score >= 60
-                      ? "#F59E0B"
-                      : "#EF4444",
+                        ? "#F59E0B"
+                        : "#EF4444",
                   backgroundColor:
                     benchmark.score >= 80
                       ? "#10B98110"
                       : benchmark.score >= 60
-                      ? "#F59E0B10"
-                      : "#EF444410",
+                        ? "#F59E0B10"
+                        : "#EF444410",
                 }}
               >
                 {benchmark.score}%
@@ -173,8 +211,8 @@ const BrandResultsDisplay = ({
                     benchmark.score >= 80
                       ? "#10B981"
                       : benchmark.score >= 60
-                      ? "#F59E0B"
-                      : "#EF4444",
+                        ? "#F59E0B"
+                        : "#EF4444",
                 }}
               />
             </div>
@@ -206,8 +244,10 @@ const BrandResultsDisplay = ({
   return (
     <>
       <div className="space-y-2 p-2 bg-gray-950">
-        {/* Main Score Display */}
-        <div className="max-w-2xl mx-auto bg-gradient-to-br from-red-900 to-gray-950 rounded-2xl overflow-hidden border border-gray-700 shadow-2xl">
+        {/* Main Score Display - Now with dynamic styling */}
+        <div
+          className={`max-w-2xl mx-auto ${scoreStyles.bgColor} rounded-2xl overflow-hidden border ${scoreStyles.border} shadow-2xl ${scoreStyles.shadow}`}
+        >
           <div className="p-6">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">
               {brandName}'s Brand Health Score
@@ -233,10 +273,10 @@ const BrandResultsDisplay = ({
                         medal === "Gold"
                           ? "#F59E0B"
                           : medal === "Silver"
-                          ? "#9CA3AF"
-                          : medal === "Bronze"
-                          ? "#B45309"
-                          : "#EF4444"
+                            ? "#9CA3AF"
+                            : medal === "Bronze"
+                              ? "#B45309"
+                              : "#EF4444"
                       }
                       strokeLinecap="round"
                       strokeDasharray={strokeDasharray}
@@ -257,10 +297,10 @@ const BrandResultsDisplay = ({
                         medal === "Gold"
                           ? "bg-yellow-500 text-yellow-900"
                           : medal === "Silver"
-                          ? "bg-gray-400 text-gray-900"
-                          : medal === "Bronze"
-                          ? "bg-amber-600 text-amber-100"
-                          : "bg-blue-500 text-white"
+                            ? "bg-gray-400 text-gray-900"
+                            : medal === "Bronze"
+                              ? "bg-amber-600 text-amber-100"
+                              : "bg-blue-500 text-white"
                       }`}
                       style={{
                         opacity: animationComplete ? 1 : 0,
@@ -281,20 +321,20 @@ const BrandResultsDisplay = ({
                   {score >= 75
                     ? "Excellent Digital Presence!"
                     : score >= 60
-                    ? "Good, With Growth Potential"
-                    : score >= 45
-                    ? "Needs Strategic Improvement"
-                    : "Urgent Attention Required"}
+                      ? "Good, With Growth Potential"
+                      : score >= 45
+                        ? "Needs Strategic Improvement"
+                        : "Urgent Attention Required"}
                 </h3>
 
                 <p className="text-gray-300 mb-4 text-sm leading-relaxed">
                   {score >= 75
                     ? `${brandName} is performing exceptionally well in the ${industry} sector. You're ahead of 85% of similar businesses.`
                     : score >= 60
-                    ? `${brandName} shows good potential in the ${industry} sector. Strategic improvements could boost your competitive edge.`
-                    : score >= 45
-                    ? `${brandName} is performing below average for the ${industry} sector. Key improvements needed for better market position.`
-                    : `${brandName} requires immediate attention to core digital presence issues in the ${industry} sector.`}
+                      ? `${brandName} shows good potential in the ${industry} sector. Strategic improvements could boost your competitive edge.`
+                      : score >= 45
+                        ? `${brandName} is performing below average for the ${industry} sector. Key improvements needed for better market position.`
+                        : `${brandName} requires immediate attention to core digital presence issues in the ${industry} sector.`}
                 </p>
 
                 <div className="flex flex-wrap gap-1.5 mb-4 justify-center lg:justify-start">
@@ -339,29 +379,27 @@ const BrandResultsDisplay = ({
         className="bg-gray-900 border border-gray-700"
       >
         <ModalContent>
-            <>
-              
-              <ModalBody className="p-6">
-                <div className="grid lg:grid-cols-2 gap-4">
-                  <MetricSection
-                    title="Business Authenticity"
-                    benchmarks={authenticityBenchmarks}
-                    icon={<ShieldCheck className="text-blue-400" size={18} />}
-                    bgColor="from-blue-950/20 to-slate-900"
-                    borderColor="border-blue-500/30"
-                  />
+          <>
+            <ModalBody className="p-6">
+              <div className="grid lg:grid-cols-2 gap-4">
+                <MetricSection
+                  title="Business Authenticity"
+                  benchmarks={authenticityBenchmarks}
+                  icon={<ShieldCheck className="text-blue-400" size={18} />}
+                  bgColor="from-blue-950/20 to-slate-900"
+                  borderColor="border-blue-500/30"
+                />
 
-                  <MetricSection
-                    title="Tech & Growth Metrics"
-                    benchmarks={techBenchmarks}
-                    icon={<TrendingUp className="text-purple-400" size={18} />}
-                    bgColor="from-purple-950/20 to-slate-900"
-                    borderColor="border-purple-500/30"
-                  />
-                </div>
-              </ModalBody>
-              
-            </>
+                <MetricSection
+                  title="Tech & Growth Metrics"
+                  benchmarks={techBenchmarks}
+                  icon={<TrendingUp className="text-purple-400" size={18} />}
+                  bgColor="from-purple-950/20 to-slate-900"
+                  borderColor="border-purple-500/30"
+                />
+              </div>
+            </ModalBody>
+          </>
         </ModalContent>
       </Modal>
     </>

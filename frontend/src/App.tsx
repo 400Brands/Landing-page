@@ -2,9 +2,9 @@ import { Route, Routes } from "react-router-dom";
 
 import IndexPage from "@/pages/index";
 import DocsPage from "@/pages/docs";
-import PricingPage from "@/pages/pricing";
+import PricingPage from "@/pages/ourThoughts";
 import BlogPage from "@/pages/blog";
-import AboutPage from "@/pages/about";
+import AboutPage from "@/pages/career";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -25,14 +25,16 @@ function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route element={<IndexPage />} path="/" />
-      <Route element={<DocsPage />} path="/docs" />
-      <Route element={<PricingPage />} path="/what_we_think" />
-      <Route element={<BlogPage />} path="/who_we_are" />
-      <Route element={<AboutPage />} path="/about" />
-      <Route element={<BrandDoctorPage />} path="/bake" />
-    </Routes>
+    <main className="dark ">
+      <Routes>
+        <Route element={<IndexPage />} path="/" />
+        <Route element={<DocsPage />} path="/what_we_do" />
+        <Route element={<PricingPage />} path="/what_we_think" />
+        <Route element={<BlogPage />} path="/who_we_are" />
+        <Route element={<AboutPage />} path="/careers" />
+        <Route element={<BrandDoctorPage />} path="/bake" />
+      </Routes>
+    </main>
   );
 }
 
