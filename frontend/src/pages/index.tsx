@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 import DefaultMain from "@/layouts/defaultMain";
 import {
   ArrowBigLeft,
@@ -83,14 +81,16 @@ export default function IndexPage() {
   };
 
 
-  interface HashLinkProps extends LinkProps {
+  interface HashLinkProps {
+    href: string;
     children: ReactNode;
+    [key: string]: any; // Allow other props
   }
 
-   const HashLink = ({ to, children, ...props }: HashLinkProps) => {
+  const HashLink = ({ href, children, ...props }: HashLinkProps) => {
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault();
-      const targetId = to.toString().replace("#", "");
+      const targetId = href.replace("#", "");
       const element = document.getElementById(targetId);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
@@ -98,11 +98,12 @@ export default function IndexPage() {
     };
 
     return (
-      <Link to={to} onClick={handleClick} {...props}>
+      <Link href={href} onClick={handleClick} {...props}>
         {children}
       </Link>
     );
   };
+  
 
   return (
     <DefaultMain>
@@ -142,7 +143,7 @@ export default function IndexPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
-                <HashLink to="#brandDoctor">
+                <HashLink href="#brandDoctor">
                   <motion.button
                     className="bg-gradient-to-r from-blue-600 to-purple-500 text-black font-medium px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
                     whileHover={{ scale: 1.05 }}
