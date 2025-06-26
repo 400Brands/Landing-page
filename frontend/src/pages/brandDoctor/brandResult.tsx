@@ -9,6 +9,17 @@ interface BrandResultsDisplayProps {
   industry: string;
   score: number;
   medal: string;
+  authenticityBenchmarks?: {
+    title: string;
+    score: number;
+    items: { text: string; present: boolean }[];
+  }[];
+  techBenchmarks?: {
+    title: string;
+    score: number;
+    items: { text: string; present: boolean }[];
+  }[];
+  summary?: string;
 }
 
 const BrandResultsDisplay = ({
@@ -16,6 +27,9 @@ const BrandResultsDisplay = ({
   industry = "Technology",
   score = 78,
   medal = "Gold",
+  authenticityBenchmarks,
+  techBenchmarks,
+  summary,
 }: BrandResultsDisplayProps) => {
   const [displayScore, setDisplayScore] = useState(0);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -80,8 +94,8 @@ const BrandResultsDisplay = ({
     requestAnimationFrame(animate);
   }, [score]);
 
-  // Business Authenticity metrics
-  const authenticityBenchmarks = [
+  // Default Business Authenticity metrics (fallback if AI doesn't provide data)
+  const defaultAuthenticityBenchmarks = [
     {
       title: "Legal Compliance",
       items: [
@@ -114,8 +128,8 @@ const BrandResultsDisplay = ({
     },
   ];
 
-  // Tech & Growth metrics
-  const techBenchmarks = [
+  // Default Tech & Growth metrics (fallback if AI doesn't provide data)
+  const defaultTechBenchmarks = [
     {
       title: "Technical Maturity",
       items: [
@@ -147,6 +161,49 @@ const BrandResultsDisplay = ({
       score: 67,
     },
   ];
+
+  // Use AI data if available, otherwise use defaults
+  const finalAuthenticityBenchmarks =
+    authenticityBenchmarks || defaultAuthenticityBenchmarks;
+  const finalTechBenchmarks = techBenchmarks || defaultTechBenchmarks;
+
+  // Add icons to AI-generated benchmarks
+  const addIconsToAuthenticityBenchmarks = (benchmarks) => {
+    const iconMap = {
+      "Legal Compliance": <ShieldCheck className="text-green-500" size={18} />,
+      "Digital Presence": <Check className="text-blue-500" size={18} />,
+      "Reputation Management": (
+        <ShieldCheck className="text-purple-500" size={18} />
+      ),
+    };
+    return benchmarks.map((benchmark) => ({
+      ...benchmark,
+      icon: iconMap[benchmark.title] || (
+        <Check className="text-blue-500" size={18} />
+      ),
+    }));
+  };
+
+  const addIconsToTechBenchmarks = (benchmarks) => {
+    const iconMap = {
+      "Technical Maturity": (
+        <TrendingUp className="text-emerald-500" size={18} />
+      ),
+      "Brand Consistency": <Star className="text-amber-500" size={18} />,
+      "Risk Assessment": <X className="text-red-500" size={18} />,
+    };
+    return benchmarks.map((benchmark) => ({
+      ...benchmark,
+      icon: iconMap[benchmark.title] || (
+        <TrendingUp className="text-emerald-500" size={18} />
+      ),
+    }));
+  };
+
+  const authenticityBenchmarksWithIcons = addIconsToAuthenticityBenchmarks(
+    finalAuthenticityBenchmarks
+  );
+  const techBenchmarksWithIcons = addIconsToTechBenchmarks(finalTechBenchmarks);
 
   const circumference = 2 * Math.PI * 32; // Reduced from 42
   const strokeDasharray = circumference;
@@ -243,7 +300,7 @@ const BrandResultsDisplay = ({
 
   return (
     <>
-      <div className="space-y-2 p-2 bg-gray-950">
+      <div className="space-y-2 p-2 ">
         {/* Main Score Display - Now with dynamic styling */}
         <div
           className={`max-w-2xl mx-auto ${scoreStyles.bgColor} rounded-2xl overflow-hidden border ${scoreStyles.border} shadow-2xl ${scoreStyles.shadow}`}
@@ -328,13 +385,14 @@ const BrandResultsDisplay = ({
                 </h3>
 
                 <p className="text-gray-300 mb-4 text-sm leading-relaxed">
-                  {score >= 75
-                    ? `${brandName} is performing exceptionally well in the ${industry} sector. You're ahead of 85% of similar businesses.`
-                    : score >= 60
-                      ? `${brandName} shows good potential in the ${industry} sector. Strategic improvements could boost your competitive edge.`
-                      : score >= 45
-                        ? `${brandName} is performing below average for the ${industry} sector. Key improvements needed for better market position.`
-                        : `${brandName} requires immediate attention to core digital presence issues in the ${industry} sector.`}
+                  {summary ||
+                    (score >= 75
+                      ? `${brandName} is performing exceptionally well in the ${industry} sector. You're ahead of 85% of similar businesses.`
+                      : score >= 60
+                        ? `${brandName} shows good potential in the ${industry} sector. Strategic improvements could boost your competitive edge.`
+                        : score >= 45
+                          ? `${brandName} is performing below average for the ${industry} sector. Key improvements needed for better market position.`
+                          : `${brandName} requires immediate attention to core digital presence issues in the ${industry} sector.`)}
                 </p>
 
                 <div className="flex flex-wrap gap-1.5 mb-4 justify-center lg:justify-start">
@@ -384,7 +442,7 @@ const BrandResultsDisplay = ({
               <div className="grid lg:grid-cols-2 gap-4">
                 <MetricSection
                   title="Business Authenticity"
-                  benchmarks={authenticityBenchmarks}
+                  benchmarks={authenticityBenchmarksWithIcons}
                   icon={<ShieldCheck className="text-blue-400" size={18} />}
                   bgColor="from-blue-950/20 to-slate-900"
                   borderColor="border-blue-500/30"
@@ -392,7 +450,7 @@ const BrandResultsDisplay = ({
 
                 <MetricSection
                   title="Tech & Growth Metrics"
-                  benchmarks={techBenchmarks}
+                  benchmarks={techBenchmarksWithIcons}
                   icon={<TrendingUp className="text-purple-400" size={18} />}
                   bgColor="from-purple-950/20 to-slate-900"
                   borderColor="border-purple-500/30"

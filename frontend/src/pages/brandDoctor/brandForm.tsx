@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { HeartPulse, CheckIcon } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom"; // Assuming react-router-dom is used for useLocation
 
 // Animation variants
 const fadeIn = {
@@ -27,29 +27,46 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
   onAnalysis,
   isAnalyzing,
 }) => {
-  const [brandName, setBrandName] = useState("");
+  const [brandName, setBrandName] = useState<string>("");
+  const [industry, setIndustry] = useState<string>(""); // State for industry
   const [autoAnalyzing, setAutoAnalyzing] = useState(false);
-  const industry = "online";
+
   const location = useLocation();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const brandParam = queryParams.get("brand");
+    const industryParam = queryParams.get("industry"); // Get industry from URL
 
     if (brandParam?.trim()) {
       const decodedBrand = decodeURIComponent(brandParam);
       setBrandName(decodedBrand);
+
+      // Only set industry if present in URL, otherwise it remains default ""
+      if (industryParam?.trim()) {
+        setIndustry(decodeURIComponent(industryParam));
+      }
+
       setAutoAnalyzing(true);
-      onAnalysis(decodedBrand, industry);
+      // Pass the potentially decoded industry or the default empty string
+      onAnalysis(
+        decodedBrand,
+        industryParam ? decodeURIComponent(industryParam) : ""
+      );
     }
-  }, [location.search, onAnalysis]);
+  }, [location.search, onAnalysis]); // Depend on location.search and onAnalysis
 
   const handleSubmit = () => {
-    if (!brandName.trim() || !industry) return;
+    // Only proceed if both brandName and industry are provided
+    if (!brandName.trim() || !industry.trim()) {
+      // You might want to show an error message to the user here
+      alert("Please enter both brand name and industry.");
+      return;
+    }
     onAnalysis(brandName, industry);
   };
 
-  // Show loading overlay if auto-analyzing
+  // Show loading overlay if auto-analyzing and currently analyzing
   if (autoAnalyzing && isAnalyzing) {
     return (
       <motion.div
@@ -80,6 +97,15 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
             <p className="text-gray-300">
               We're examining{" "}
               <span className="font-semibold text-blue-300">{brandName}</span>{" "}
+              {industry && (
+                <>
+                  in the{" "}
+                  <span className="font-semibold text-blue-300">
+                    {industry}
+                  </span>{" "}
+                  industry{" "}
+                </>
+              )}
               across the web
             </p>
             <div className="w-full bg-gray-700 rounded-full h-2.5 mt-4">
@@ -98,13 +124,13 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
 
   return (
     <motion.div
-      className="container min-h-screen mx-auto px-4"
+      className="container min-h-screen mx-auto px-4 flex items-center justify-center py-12" // Added flex for centering
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
       {/* Form Section */}
-      <motion.div className="max-w-3xl mx-auto" variants={scaleUp}>
+      <motion.div className="max-w-3xl mx-auto w-full" variants={scaleUp}>
         <motion.div
           className="bg-gradient-to-br from-slate-900 to-gray-950 p-8 rounded-xl border border-gray-700 shadow-xl"
           whileHover={{
@@ -147,6 +173,26 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
               />
             </div>
 
+            <div>
+              <label
+                htmlFor="industry"
+                className="block text-lg font-medium text-gray-300 mb-2"
+              >
+                Your Industry
+              </label>
+              {/* You can use a select dropdown for industry for better control over valid inputs,
+                  or keep it a text input if the industry can be anything. */}
+              <motion.input
+                type="text" // Changed to text for flexibility, but a select is often better for industries
+                id="industry"
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                placeholder="e.g. E-commerce, Fintech, Healthcare, SaaS"
+                whileFocus={{ scale: 1.01, borderColor: "#3b82f6" }}
+              />
+            </div>
+
             <motion.div
               className="bg-gray-800 rounded-xl p-6 border-l-4 border-blue-500"
               whileHover={{ x: 5 }}
@@ -175,21 +221,23 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
 
             <motion.button
               onClick={handleSubmit}
-              disabled={isAnalyzing || !brandName.trim() || !industry}
+              disabled={isAnalyzing || !brandName.trim() || !industry.trim()} // Added .trim() for industry
               className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 ${
-                isAnalyzing || !brandName.trim() || !industry
+                isAnalyzing || !brandName.trim() || !industry.trim()
                   ? "bg-gray-600 cursor-not-allowed"
                   : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg"
               }`}
               whileHover={
-                brandName.trim() && industry
+                brandName.trim() && industry.trim()
                   ? {
                       scale: 1.02,
                       boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.3)",
                     }
                   : {}
               }
-              whileTap={brandName.trim() && industry ? { scale: 0.98 } : {}}
+              whileTap={
+                brandName.trim() && industry.trim() ? { scale: 0.98 } : {}
+              }
             >
               {isAnalyzing ? (
                 <span className="flex items-center justify-center">
