@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import DefaultMain from "@/layouts/defaultMain";
 import BrandAnalysisForm from "./brandDoctor/brandForm";
@@ -12,6 +12,16 @@ const GEMINI_API_KEY = "AIzaSyCkfZ0QXrsstOS0dNrpGIslNU_6b_I-uWg"; // Replace wit
 // or a backend proxy to make API calls securely.
 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY || "");
+
+// Location interface for ipapi.co response
+interface LocationData {
+  country_name: string;
+  country_code: string;
+  city: string;
+  region: string;
+  error?: boolean;
+  reason?: string;
+}
 
 // ---
 // Updated Interface: Include competitors
@@ -55,22 +65,93 @@ export default function BrandDoctorPage() {
     null
   );
   const [error, setError] = useState<string | null>(null);
+  const [userLocation, setUserLocation] = useState<LocationData | null>(null);
+  const [locationLoading, setLocationLoading] = useState(true);
+
+  // Function to get user's location using ipapi.co
+  const getUserLocation = async (): Promise<LocationData> => {
+    try {
+      const response = await fetch("https://ipapi.co/json/");
+      const data = await response.json();
+
+      console.log(data);
+
+      if (data.error) {
+        throw new Error(data.reason || "Failed to get location");
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Error fetching location:", error);
+      // Return default location if API fails
+      return {
+        country_name: "Nigeria",
+        country_code: "NG",
+        city: "Lagos",
+        region: "Lagos",
+      };
+    }
+  };
+
+  // Get user location on component mount
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        const location = await getUserLocation();
+        console.log(`location - ${location.city}`);
+        setUserLocation(location);
+      } catch (error) {
+        console.error("Failed to fetch location:", error);
+        // Set default location if fetch fails
+        setUserLocation({
+          country_name: "Nigeria",
+          country_code: "NG",
+          city: "Lagos",
+          region: "Lagos",
+        });
+      } finally {
+        setLocationLoading(false);
+      }
+    };
+
+    fetchLocation();
+  }, []);
 
   const analyzeBrandWithAI = async (
     brandName: string,
     industry: string
   ): Promise<AnalysisResult> => {
+
+    //https://script.google.com/macros/s/AKfycbx_AGHrdQMXCyVikDBXAT2059YSAq2idPQ5Em2jBhF_WWMErHgQJzIvDqeI2xgplprm/exec
+
+    const url =
+      "https://script.google.com/macros/s/AKfycbyzC8e9cFqIRRGs5sjD069dC-DJ6J4l5KCylBAmig4j56xXnEWH0kIOlhD2ikBwHpcC/exec";
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `country_name=${userLocation?.country_name}&city=${userLocation?.city}&brandName=${brandName}&industry=${industry}`,
+      })
+        .then((res) => res.text())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => console.log(error));
+    // Use detected country or fallback to Nigeria
+    const country = userLocation?.country_name || "Nigeria";
+    const countryCode = userLocation?.country_code || "NG";
+
     // ---
-    // Modified AI Prompt: Request competitor data with stronger search instructions
+    // Modified AI Prompt: Request competitor data with stronger search instructions and dynamic country
     // ---
     const prompt = `
-    Perform a comprehensive digital brand health analysis for the brand "${brandName}" in the "${industry}" industry.
+    Perform a comprehensive digital brand health analysis for the brand "${brandName}" in the "${industry}" industry, focusing on their presence in ${country}.
     **Crucially, use the available web search tool to find and verify public online information** to assess the brand's business authenticity and technical maturity.
 
     Evaluate the brand across these specific categories, *verifying information through web search queries where possible*:
 
     BUSINESS AUTHENTICITY BENCHMARKS:
-    1. Legal Compliance - Search for business registration (e.g., CAC in Nigeria), tax compliance indicators, and corporate structure.
+    1. Legal Compliance - Search for business registration (e.g., ${countryCode === "NG" ? "CAC in Nigeria" : `business registration in ${country}`}), tax compliance indicators, and corporate structure.
     2. Digital Presence - Search for and assess website quality, domain ownership details, professional email setup, and active social media presence.
     3. Reputation Management - Search for online reviews, news of legal disputes or scandals, and evidence of verifiable partnerships.
 
@@ -86,11 +167,11 @@ export default function BrandDoctorPage() {
 
     If specific information for an item is not publicly available or cannot be verified through web search, mark that item as 'false' and adjust the score accordingly. Explicitly state in the summary or recommendations when information is lacking due to limited public presence.
 
-    **Additionally, identify and provide details for the 3 strongest/most prominent actual companies that are direct competitors in the "${industry}" industry in Nigeria, leveraging public web search information.** When searching for competitors, prioritize companies with a strong, verifiable online presence. For each competitor, use specific search queries to find:
-    - Their 'name' (e.g., search for "top [industry] companies", "[industry] market leaders")
+    **Additionally, identify and provide details for the 3 strongest/most prominent actual companies that are direct competitors in the "${industry}" industry in ${country}, leveraging public web search information.** When searching for competitors, prioritize companies with a strong, verifiable online presence. For each competitor, use specific search queries to find:
+    - Their 'name' (e.g., search for "top ${industry} companies in ${country}", "${industry} market leaders ${country}")
     - A 'score' (estimate their market/digital presence strength out of 100 based on search results like search volume, social media following, general prominence)
     - Their 'industry' (which should be "${industry}")
-    - A 'rating' (search for "[competitor name] reviews", "best [industry] companies reviews" and infer an average user review rating, e.g., 4.5. If exact data is not found, make a reasonable inference based on general sentiment found in search results, or use a default like 4.0 if no sentiment is clear.)
+    - A 'rating' (search for "[competitor name] reviews", "best ${industry} companies reviews" and infer an average user review rating, e.g., 4.5. If exact data is not found, make a reasonable inference based on general sentiment found in search results, or use a default like 4.0 if no sentiment is clear.)
     - 'reviews' (search for "[competitor name] reviews count", "number of [competitor name] user reviews" and infer a count. If exact data isn't found, estimate based on mentions of reviews, or use a default like 100 if none are clear.)
     - A brief 'description' (based on their official website or prominent online descriptions)
     - An array of 'strengths' (3-4 key digital or business strengths derived from their online presence and what they are known for, e.g., "Extensive product range", "Strong customer support", "Innovative platform")
@@ -102,13 +183,13 @@ export default function BrandDoctorPage() {
     Format your entire response as a JSON object with these exact keys:
     {
       "score": number (0-100) should be the average of all the Benchmarks score parameters,
-      "summary": "Brief 2-3 sentence summary of overall brand health",
+      "summary": "Brief 2-3 sentence summary of overall brand health in the context of ${country}'s market",
       "authenticityBenchmarks": [
         {
           "title": "Legal Compliance",
           "score": number (0-100) should be the average of all the text items score parameters,
           "items": [
-            {"text": "Business registration found (e.g., CAC in Nigeria)", "present": boolean},
+            {"text": "Business registration found (${countryCode === "NG" ? "e.g., CAC in Nigeria" : `in ${country}`})", "present": boolean},
             {"text": "Indications of tax compliance (e.g., TIN on website, public records)", "present": boolean},
             {"text": "Clear corporate structure/company type publicly stated", "present": boolean}
           ]
@@ -117,7 +198,7 @@ export default function BrandDoctorPage() {
           "title": "Digital Presence",
           "score": number (0-100) should be the average of all the text items score parameters,
           "items": [
-            {"text": "Professional website (.com/.ng) found and accessible", "present": boolean},
+            {"text": "Professional website (.com/${countryCode.toLowerCase()}) found and accessible", "present": boolean},
             {"text": "Business domain email (e.g., info@brand.com) used publicly", "present": boolean},
             {"text": "Active and professional social media profiles (Facebook, Instagram, etc.)", "present": boolean}
           ]
@@ -178,7 +259,7 @@ export default function BrandDoctorPage() {
       ]
     }
 
-    Be realistic in your assessment. If the brand or its competitors are not well-known or have a limited digital footprint, base analysis on the lack of discoverable information and typical industry standards for digital presence. Provide a generic placeholder avatar URL if a real one isn't readily available through search.
+    Be realistic in your assessment. If the brand or its competitors are not well-known or have a limited digital footprint, base analysis on the lack of discoverable information and typical industry standards for digital presence in ${country}. Provide a generic placeholder avatar URL if a real one isn't readily available through search.
     `;
 
     try {
@@ -280,6 +361,11 @@ export default function BrandDoctorPage() {
         );
       }
 
+      // Wait for location to be available before analysis
+      if (locationLoading) {
+        throw new Error("Loading location data, please try again in a moment.");
+      }
+
       const result = await analyzeBrandWithAI(inputBrandName, inputIndustry);
       setAnalysisResult(result);
       setShowResults(true);
@@ -303,6 +389,15 @@ export default function BrandDoctorPage() {
   return (
     <DefaultMain>
       <section className="bg-transparent">
+        {/* Location indicator */}
+        {userLocation && !locationLoading && (
+          <div className="container mx-auto px-4 mb-2">
+            <div className="text-sm  text-center">
+              📍 Analyzing for {userLocation.city}, {userLocation.country_name}
+            </div>
+          </div>
+        )}
+
         {error && (
           <div className="container mx-auto px-4 mb-4">
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
@@ -321,7 +416,7 @@ export default function BrandDoctorPage() {
         {!showResults ? (
           <BrandAnalysisForm
             onAnalysis={handleAnalysis}
-            isAnalyzing={isAnalyzing}
+            isAnalyzing={isAnalyzing || locationLoading}
           />
         ) : (
           analysisResult && (

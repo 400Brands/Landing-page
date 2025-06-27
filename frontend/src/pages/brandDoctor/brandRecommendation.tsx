@@ -10,6 +10,7 @@ import {
   TrendingUp,
   Award,
 } from "lucide-react";
+import PurchaseModal from "@/components/purchaseModal";
 
 interface Competitor {
   name: string;
@@ -51,6 +52,7 @@ const BrandRecommendations = ({
   techBenchmarks = [],
 }: BrandRecommendationsProps) => {
   const [currentRecommendation, setCurrentRecommendation] = useState(0);
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
 
   // Define all possible service recommendations
   const allPossibleRecommendations = {
@@ -357,7 +359,10 @@ const BrandRecommendations = ({
                   </div>
 
                   <div className="sm:w-1/2 w-full space-y-3">
-                    <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-105">
+                    <button
+                      onClick={() => setIsPurchaseModalOpen(true)}
+                      className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-105"
+                    >
                       Buy Plan
                       <ArrowUpRight className="ml-2 h-5 w-5" />
                     </button>
@@ -404,7 +409,6 @@ const BrandRecommendations = ({
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="font-bold text-white text-lg">
@@ -513,6 +517,14 @@ const BrandRecommendations = ({
           </div>
         </div>
       </div>
+
+      <PurchaseModal
+        isOpen={isPurchaseModalOpen}
+        onClose={() => setIsPurchaseModalOpen(false)}
+        planName={recommendations[currentRecommendation].planName}
+        price={recommendations[currentRecommendation].price}
+        planTitle={recommendations[currentRecommendation].title}
+      />
     </div>
   );
 };

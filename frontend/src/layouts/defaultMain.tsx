@@ -51,7 +51,7 @@ export default function DefaultMain({ children }: DefaultMainProps) {
   };
 
   return (
-    <div className="relative flex flex-col min-h-screen font-ubuntu">
+    <div className="relative flex flex-col min-h-screen font-Raleway">
       {/* Video Backgrounds */}
       <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
         {/* First Video */}
