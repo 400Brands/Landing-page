@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 
 import { useState } from "react";
 import {
@@ -24,7 +24,17 @@ interface Competitor {
   verified: boolean;
 }
 
-// Define interfaces for benchmarks if not already defined globally or in BrandAnalysisForm
+interface ServiceRecommendation {
+  title: string;
+  description: string;
+  service: string;
+  planName: string;
+  price: string;
+  icon: string;
+  priority: number;
+  relevantBenchmarks: string[];
+}
+
 interface BenchmarkCategory {
   title: string;
   score: number;
@@ -37,7 +47,7 @@ interface BrandRecommendationsProps {
   score: number;
   onReset: () => void;
   competitors: Competitor[];
-  // Add the benchmark arrays here
+  recommendations: ServiceRecommendation[]; // Now comes from AI
   authenticityBenchmarks: BenchmarkCategory[];
   techBenchmarks: BenchmarkCategory[];
 }
@@ -48,230 +58,153 @@ const BrandRecommendations = ({
   score = 78,
   onReset = () => {},
   competitors = [],
+  recommendations = [], // AI-generated recommendations
   authenticityBenchmarks = [],
   techBenchmarks = [],
 }: BrandRecommendationsProps) => {
   const [currentRecommendation, setCurrentRecommendation] = useState(0);
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
 
-  // Define all possible service recommendations
-  const allPossibleRecommendations = {
-    starterKit: {
-      title: "Starter Kit",
-      description: "Build a solid foundation for your brand online.",
-      service:
-        "1-page website, WhatsApp business setup, social media audit, basic SEO setup",
-      planName: "🔹 Starter Kit",
-      price: "₦150,000 / $99",
-      icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746565485/responsive-design_wobrfb.png",
-      priority: 1, // Lower number means higher priority for weak scores
-      relevantBenchmarks: ["Digital Presence", "Technical Maturity"],
-    },
-    techConsultation: {
-      title: "Tech Consultation & Audit",
-      description: "Get expert advice on how to improve your tech presence.",
-      service:
-        "1-hour tech strategy call, comprehensive website audit, security recommendations",
-      planName: "⚡️ Tech Strategy Session",
-      price: "₦200,000 / $129",
-      icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746696017/consultant_bgaqe2.png",
-      priority: 2,
-      relevantBenchmarks: ["Technical Maturity", "Risk Assessment"],
-    },
-    digitalPresenceBoost: {
-      title: "Digital Presence Boost",
-      description: "Enhance your online visibility and reputation.",
-      service:
-        "Professional social media setup/optimization, content strategy workshop, online review management guide",
-      planName: "📈 Digital Launchpad",
-      price: "₦250,000 / $159",
-      icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746566762/growth_ggcqxd.png", // Re-using an icon, consider unique ones
-      priority: 3,
-      relevantBenchmarks: ["Digital Presence", "Reputation Management"],
-    },
-    growthBundle: {
-      title: "Growth Bundle",
-      description:
-        "Scale your business with our comprehensive growth services.",
-      service:
-        "5-page website or landing funnel, AI WhatsApp bot, social media management, basic digital ads setup",
-      planName: "🔸 Growth Bundle",
-      price: "₦450,000 / $299",
-      icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746566344/ai_nuhrup.png",
-      priority: 4,
-      relevantBenchmarks: ["Brand Consistency", "Technical Maturity"],
-    },
-    digitalMarketingPackage: {
-      title: "Digital Marketing Package",
-      description: "Enhance your online presence and reach more customers.",
-      service:
-        "SEO optimization, content marketing plan, advanced social media strategy, email marketing setup",
-      planName: "🎯 Marketing Accelerator",
-      price: "₦600,000 / $399",
-      icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746566762/growth_ggcqxd.png",
-      priority: 5,
-      relevantBenchmarks: ["Brand Consistency", "Digital Presence"],
-    },
-    brandMasterPlan: {
-      title: "Brand Master Plan",
-      description:
-        "Take your already strong brand to the next level with our premium services.",
-      service:
-        "Full website or mobile app, AI & automation workflows, 3-month content & marketing plan, advanced analytics",
-      planName: "🌟 Brand Master Plan",
-      price: "₦950,000 / $599",
-      icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746723859/analysis_nnspfu.png",
-      priority: 6,
-      relevantBenchmarks: [], // For strong brands, general growth
-    },
-    web3Integration: {
-      title: "Web3 & Blockchain Integration",
-      description:
-        "Integrate cutting-edge blockchain solutions into your business.",
-      service:
-        "DApps, tokenomics, NFT campaigns, smart contract development, decentralized identity solutions",
-      planName: "🛠️ Enterprise & Custom Build",
-      price: "Custom Quote",
-      icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746696632/blockchain-security_lhojoj.png",
-      priority: 7,
-      relevantBenchmarks: [], // Specific advanced service, not directly tied to core benchmarks
-    },
+  // Pricing benchmarks for approximation
+  const pricingBenchmarks = {
+    starter: { naira: 150000, usd: 99 },
+    consultation: { naira: 200000, usd: 129 },
+    digital: { naira: 250000, usd: 159 },
+    growth: { naira: 450000, usd: 299 },
+    marketing: { naira: 600000, usd: 399 },
+    premium: { naira: 950000, usd: 599 },
+    enterprise: { naira: 1500000, usd: 999 },
   };
 
-  // Helper to get all benchmarks combined
-  const getAllBenchmarks = () => [...authenticityBenchmarks, ...techBenchmarks];
-
-  const getDynamicRecommendations = () => {
-    const allBenchmarks = getAllBenchmarks();
-    const recommendedServices: (typeof allPossibleRecommendations)[keyof typeof allPossibleRecommendations][] =
-      [];
-    const addedServiceTitles = new Set<string>(); // To prevent duplicate service recommendations
-
-    // 1. Prioritize services for the lowest-scoring individual benchmarks
-    // Sort benchmarks by score in ascending order
-    const sortedBenchmarks = [...allBenchmarks].sort(
-      (a, b) => a.score - b.score
-    );
-
-    for (const benchmark of sortedBenchmarks) {
-      if (benchmark.score < 60) {
-        // If a benchmark is particularly weak
-        for (const serviceKey in allPossibleRecommendations) {
-          // Use type assertion here to tell TypeScript that serviceKey is indeed a key of allPossibleRecommendations
-          const service =
-            allPossibleRecommendations[
-              serviceKey as keyof typeof allPossibleRecommendations
-            ];
-          if (
-            service.relevantBenchmarks &&
-            service.relevantBenchmarks.includes(benchmark.title) &&
-            !addedServiceTitles.has(service.title)
-          ) {
-            recommendedServices.push(service);
-            addedServiceTitles.add(service.title);
-            // Limit to 2 targeted recommendations for weaknesses
-            if (recommendedServices.length >= 2) break;
-          }
-        }
-      }
-      if (recommendedServices.length >= 2) break; // Stop if we have enough targeted recommendations
-    }
-
-    // 2. Add general recommendations based on overall score if not enough targeted ones
-    if (recommendedServices.length < 2) {
-      if (score >= 75) {
-        // High score, suggest advanced/growth services
-        if (
-          !addedServiceTitles.has(
-            allPossibleRecommendations.brandMasterPlan.title
-          )
-        ) {
-          recommendedServices.push(allPossibleRecommendations.brandMasterPlan);
-          addedServiceTitles.add(
-            allPossibleRecommendations.brandMasterPlan.title
-          );
-        }
-        if (
-          recommendedServices.length < 2 &&
-          !addedServiceTitles.has(
-            allPossibleRecommendations.web3Integration.title
-          )
-        ) {
-          recommendedServices.push(allPossibleRecommendations.web3Integration);
-          addedServiceTitles.add(
-            allPossibleRecommendations.web3Integration.title
-          );
-        }
-      } else if (score >= 60) {
-        // Medium score, suggest growth services
-        if (
-          !addedServiceTitles.has(allPossibleRecommendations.growthBundle.title)
-        ) {
-          recommendedServices.push(allPossibleRecommendations.growthBundle);
-          addedServiceTitles.add(allPossibleRecommendations.growthBundle.title);
-        }
-        if (
-          recommendedServices.length < 2 &&
-          !addedServiceTitles.has(
-            allPossibleRecommendations.digitalMarketingPackage.title
-          )
-        ) {
-          recommendedServices.push(
-            allPossibleRecommendations.digitalMarketingPackage
-          );
-          addedServiceTitles.add(
-            allPossibleRecommendations.digitalMarketingPackage.title
-          );
-        }
-      } else {
-        // Lower score, suggest foundational services
-        if (
-          !addedServiceTitles.has(allPossibleRecommendations.starterKit.title)
-        ) {
-          recommendedServices.push(allPossibleRecommendations.starterKit);
-          addedServiceTitles.add(allPossibleRecommendations.starterKit.title);
-        }
-        if (
-          recommendedServices.length < 2 &&
-          !addedServiceTitles.has(
-            allPossibleRecommendations.techConsultation.title
-          )
-        ) {
-          recommendedServices.push(allPossibleRecommendations.techConsultation);
-          addedServiceTitles.add(
-            allPossibleRecommendations.techConsultation.title
-          );
-        }
-      }
-    }
-
-    // Ensure we always return at least one recommendation, even if logic fails to find specifics
-    if (recommendedServices.length === 0) {
-      if (score >= 75)
-        return [
-          allPossibleRecommendations.brandMasterPlan,
-          allPossibleRecommendations.web3Integration,
-        ];
-      if (score >= 60)
-        return [
-          allPossibleRecommendations.growthBundle,
-          allPossibleRecommendations.digitalMarketingPackage,
-        ];
-      return [
-        allPossibleRecommendations.starterKit,
-        allPossibleRecommendations.techConsultation,
-      ];
-    }
-
-    // Sort the final recommendations by their defined priority
-    return recommendedServices.sort((a, b) => a.priority - b.priority);
+  // Icon mapping for different service types
+  const iconMapping = {
+    website:
+      "https://res.cloudinary.com/dgbreoalg/image/upload/v1746565485/responsive-design_wobrfb.png",
+    consultation:
+      "https://res.cloudinary.com/dgbreoalg/image/upload/v1746696017/consultant_bgaqe2.png",
+    growth:
+      "https://res.cloudinary.com/dgbreoalg/image/upload/v1746566762/growth_ggcqxd.png",
+    ai: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746566344/ai_nuhrup.png",
+    analysis:
+      "https://res.cloudinary.com/dgbreoalg/image/upload/v1746723859/analysis_nnspfu.png",
+    blockchain:
+      "https://res.cloudinary.com/dgbreoalg/image/upload/v1746696632/blockchain-security_lhojoj.png",
+    marketing:
+      "https://res.cloudinary.com/dgbreoalg/image/upload/v1746566762/growth_ggcqxd.png",
+    default:
+      "https://res.cloudinary.com/dgbreoalg/image/upload/v1746565485/responsive-design_wobrfb.png",
   };
 
-  const recommendations = getDynamicRecommendations(); // Call once and store
+  // Function to determine appropriate icon based on service type
+  const getServiceIcon = (title: string, description: string) => {
+    const lowerTitle = title.toLowerCase();
+    const lowerDesc = description.toLowerCase();
+
+    if (lowerTitle.includes("website") || lowerDesc.includes("website"))
+      return iconMapping.website;
+    if (
+      lowerTitle.includes("consultation") ||
+      lowerDesc.includes("consultation")
+    )
+      return iconMapping.consultation;
+    if (lowerTitle.includes("ai") || lowerDesc.includes("ai"))
+      return iconMapping.ai;
+    if (lowerTitle.includes("marketing") || lowerDesc.includes("marketing"))
+      return iconMapping.marketing;
+    if (lowerTitle.includes("growth") || lowerDesc.includes("growth"))
+      return iconMapping.growth;
+    if (lowerTitle.includes("analysis") || lowerDesc.includes("analysis"))
+      return iconMapping.analysis;
+    if (lowerTitle.includes("blockchain") || lowerDesc.includes("blockchain"))
+      return iconMapping.blockchain;
+
+    return iconMapping.default;
+  };
+
+  // Function to approximate pricing based on service complexity
+  const approximatePrice = (
+    title: string,
+    description: string,
+    service: string
+  ) => {
+    const content = `${title} ${description} ${service}`.toLowerCase();
+
+    // Enterprise/Custom solutions
+    if (
+      content.includes("enterprise") ||
+      content.includes("custom") ||
+      content.includes("blockchain")
+    ) {
+      return `₦${pricingBenchmarks.enterprise.naira.toLocaleString()} / $${pricingBenchmarks.enterprise.usd}`;
+    }
+
+    // Premium solutions
+    if (
+      content.includes("premium") ||
+      content.includes("master") ||
+      content.includes("advanced")
+    ) {
+      return `₦${pricingBenchmarks.premium.naira.toLocaleString()} / $${pricingBenchmarks.premium.usd}`;
+    }
+
+    // Marketing packages
+    if (
+      content.includes("marketing") ||
+      content.includes("seo") ||
+      content.includes("ads")
+    ) {
+      return `₦${pricingBenchmarks.marketing.naira.toLocaleString()} / $${pricingBenchmarks.marketing.usd}`;
+    }
+
+    // Growth packages
+    if (
+      content.includes("growth") ||
+      content.includes("bundle") ||
+      content.includes("funnel")
+    ) {
+      return `₦${pricingBenchmarks.growth.naira.toLocaleString()} / $${pricingBenchmarks.growth.usd}`;
+    }
+
+    // Digital presence
+    if (
+      content.includes("digital") ||
+      content.includes("social") ||
+      content.includes("presence")
+    ) {
+      return `₦${pricingBenchmarks.digital.naira.toLocaleString()} / $${pricingBenchmarks.digital.usd}`;
+    }
+
+    // Consultation
+    if (
+      content.includes("consultation") ||
+      content.includes("audit") ||
+      content.includes("strategy")
+    ) {
+      return `₦${pricingBenchmarks.consultation.naira.toLocaleString()} / $${pricingBenchmarks.consultation.usd}`;
+    }
+
+    // Default to starter pricing
+    return `₦${pricingBenchmarks.starter.naira.toLocaleString()} / $${pricingBenchmarks.starter.usd}`;
+  };
+
+  // Process AI recommendations to add missing data
+  const processedRecommendations = recommendations.map((rec, index) => ({
+    ...rec,
+    icon: rec.icon || getServiceIcon(rec.title, rec.description),
+    price:
+      rec.price || approximatePrice(rec.title, rec.description, rec.service),
+    priority: rec.priority || index + 1,
+    planName: rec.planName || `🔹 ${rec.title}`,
+  }));
+
+  // Sort by priority if available
+  const sortedRecommendations = processedRecommendations.sort(
+    (a, b) => a.priority - b.priority
+  );
 
   const nextRecommendation = () => {
     setCurrentRecommendation(
-      (prev) => (prev + 1) % recommendations.length // Use the recommendations variable
+      (prev) => (prev + 1) % sortedRecommendations.length
     );
   };
 
@@ -293,12 +226,12 @@ const BrandRecommendations = ({
   return (
     <div className="space-y-8 p-6 bg-gray-950 min-h-screen">
       {/* Recommended Services */}
-      <div className="max-w-5xl mx-auto ">
+      <div className="max-w-5xl mx-auto">
         <h3 className="text-2xl lg:text-3xl font-bold text-white mb-6 text-center">
           Recommended Services For {brandName}
         </h3>
 
-        {recommendations.length > 0 ? (
+        {sortedRecommendations.length > 0 ? (
           <div className="bg-gradient-to-br from-slate-900 to-gray-950 rounded-2xl border border-gray-700 p-6 md:p-8 relative overflow-hidden shadow-xl">
             <div className="absolute top-0 right-0 bg-gradient-to-l from-blue-500 to-purple-600 text-white px-4 py-1 text-sm font-medium rounded-bl-lg">
               Best Match
@@ -307,26 +240,26 @@ const BrandRecommendations = ({
             <div className="flex flex-col md:flex-row gap-6 md:gap-8 mt-4">
               <div className="md:w-1/3 flex justify-center">
                 <img
-                  src={recommendations[currentRecommendation].icon}
-                  alt={recommendations[currentRecommendation].title}
+                  src={sortedRecommendations[currentRecommendation].icon}
+                  alt={sortedRecommendations[currentRecommendation].title}
                   className="h-48 w-48 object-cover rounded-lg"
                 />
               </div>
 
               <div className="md:w-2/3">
                 <h4 className="text-2xl lg:text-3xl font-bold text-white mb-3">
-                  {recommendations[currentRecommendation].title}
+                  {sortedRecommendations[currentRecommendation].title}
                 </h4>
 
                 <p className="text-gray-300 mb-6 text-lg">
-                  {recommendations[currentRecommendation].description}
+                  {sortedRecommendations[currentRecommendation].description}
                 </p>
 
                 <ul className="space-y-3 mb-8">
                   <li className="flex items-start">
                     <Check className="flex-shrink-0 h-5 w-5 text-green-500 mt-0.5" />
                     <span className="ml-3 text-gray-300">
-                      {recommendations[currentRecommendation].service}
+                      {sortedRecommendations[currentRecommendation].service}
                     </span>
                   </li>
                   <li className="flex items-start">
@@ -350,10 +283,10 @@ const BrandRecommendations = ({
                         Service Package
                       </p>
                       <p className="text-lg font-bold text-white mb-1">
-                        {recommendations[currentRecommendation].planName}
+                        {sortedRecommendations[currentRecommendation].planName}
                       </p>
                       <p className="text-xl text-blue-400 font-bold">
-                        {recommendations[currentRecommendation].price}
+                        {sortedRecommendations[currentRecommendation].price}
                       </p>
                     </div>
                   </div>
@@ -367,24 +300,35 @@ const BrandRecommendations = ({
                       <ArrowUpRight className="ml-2 h-5 w-5" />
                     </button>
 
-                    <button
-                      onClick={nextRecommendation}
-                      className="w-full bg-transparent border border-gray-600 text-gray-300 hover:bg-gray-800 font-medium py-2 px-4 rounded-lg flex items-center justify-center transition-all duration-200"
-                    >
-                      See Alternative
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </button>
+                    {sortedRecommendations.length > 1 && (
+                      <button
+                        onClick={nextRecommendation}
+                        className="w-full bg-transparent border border-gray-600 text-gray-300 hover:bg-gray-800 font-medium py-2 px-4 rounded-lg flex items-center justify-center transition-all duration-200"
+                      >
+                        See Alternative ({currentRecommendation + 1} of{" "}
+                        {sortedRecommendations.length})
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         ) : (
-          <p className="text-center text-gray-400 text-lg">
-            No specific service recommendations available at this time.
-          </p>
+          <div className="bg-gradient-to-br from-slate-900 to-gray-950 rounded-2xl border border-gray-700 p-8 text-center">
+            <p className="text-gray-400 text-lg mb-4">
+              No specific service recommendations available at this time.
+            </p>
+            <p className="text-gray-500 text-sm">
+              Our AI analysis couldn't determine specific services for your
+              brand. Please try running the analysis again or contact our
+              support team.
+            </p>
+          </div>
         )}
       </div>
+
       {/* Competitors Ahead Section */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
@@ -486,7 +430,8 @@ const BrandRecommendations = ({
           </p>
         )}
       </div>
-      {/* Call to Action - Reduced top margin */}
+
+      {/* Call to Action */}
       <div className="max-w-5xl mx-auto">
         <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-2xl border border-blue-900/50 p-8 text-center relative shadow-xl">
           <div className="absolute top-4 right-4">
@@ -518,13 +463,15 @@ const BrandRecommendations = ({
         </div>
       </div>
 
-      <PurchaseModal
-        isOpen={isPurchaseModalOpen}
-        onClose={() => setIsPurchaseModalOpen(false)}
-        planName={recommendations[currentRecommendation].planName}
-        price={recommendations[currentRecommendation].price}
-        planTitle={recommendations[currentRecommendation].title}
-      />
+      {sortedRecommendations.length > 0 && (
+        <PurchaseModal
+          isOpen={isPurchaseModalOpen}
+          onClose={() => setIsPurchaseModalOpen(false)}
+          planName={sortedRecommendations[currentRecommendation].planName}
+          price={sortedRecommendations[currentRecommendation].price}
+          planTitle={sortedRecommendations[currentRecommendation].title}
+        />
+      )}
     </div>
   );
 };

@@ -10,62 +10,11 @@ import {
   Star,
 } from "lucide-react";
 import { ReactNode, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
 import { Link } from "@heroui/link";
 import { TypeAnimation } from "react-type-animation";
 import BrandAnalysisForm from "@/components/BrandAnalysisForm";
 import { works } from "@/constant";
-
-// Animation variants
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-};
-
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.8 } },
-};
-
-const slideUp = {
-  hidden: { y: 50, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut" },
-  },
-};
-
-const scaleUp = {
-  hidden: { scale: 0.9, opacity: 0 },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: { duration: 0.5, ease: "backOut" },
-  },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.3,
-    },
-  },
-};
 
 export default function IndexPage() {
   const [currentWork, setCurrentWork] = useState(0);
@@ -108,79 +57,65 @@ export default function IndexPage() {
     <DefaultMain>
       {/* Hero Section with Video Background */}
       <section className="flex flex-col items-center justify-between min-h-screen text-white py-16 overflow-hidden">
-        <motion.div
+        <div
           className="container mx-auto flex flex-col gap-6"
-          initial="hidden"
-          animate="show"
-          variants={container}
+          
         >
           <div className="flex flex-col md:flex-row item-center">
-            <motion.div className="md:w-1/2 z-10 px-4 md:px-0" variants={item}>
-              <motion.h1
+            <div className="md:w-1/2 z-10 px-4 md:px-0" >
+              <h1
                 className="text-4xl md:text-4xl lg:text-6xl font-sans font-bold mb-4 md:mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+                
               >
                 Growth Partner for Future-Ready Brands
-              </motion.h1>
+              </h1>
 
-              <motion.p
+              <p
                 className="text-lg md:text-xl mb-6 md:mb-8 opacity-90"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                
               >
                 From 🧠 <b>Idea</b> to 🚀 <b>Execution</b>, we digitize, design,
                 and drive growth for businesses, professionals, and rising
                 brands.
-              </motion.p>
+              </p>
 
-              <motion.div
+              <div
                 className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
+                
               >
                 <HashLink href="#brandDoctor">
-                  <motion.button
+                  <button
                     className="bg-gradient-to-r from-blue-600 to-purple-500 text-black font-medium px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                   
                   >
                     <span>Brand Doctor</span>
-                  </motion.button>
+                  </button>
                 </HashLink>
 
                 <Link isExternal href="https://wa.me/2347083519662">
-                  <motion.button
+                  <button
                     className="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg flex items-center justify-center transition-colors duration-300"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    
                   >
                     <Headset className="w-4 h-4 mr-2" />
                     <span>Book Free Consultation</span>
-                  </motion.button>
+                  </button>
                 </Link>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
-            <motion.div
+            <div
               className="md:w-1/2"
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 0.5 }}
+             
             >
               {/* Animated decorative elements can be added here */}
-            </motion.div>
+            </div>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           className="w-full h-24 z-10 text-center px-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
+          
         >
           <p className="font-sans">
             <TypeAnimation
@@ -210,7 +145,7 @@ export default function IndexPage() {
             <br /> to turn your ideas into world-class product
             <br /> just starting or scaling
           </p>
-        </motion.div>
+        </div>
       </section>
 
       {/* Brand Doctor aesthetic 1 input form that Routes to /D with the input value */}
@@ -218,14 +153,11 @@ export default function IndexPage() {
         id="brandDoctor"
         className="py-16 md:py-24 bg-gradient-to-b from-gray-900 to-gray-950"
       >
-        <motion.div
+        <div
           className="container mx-auto px-4"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeIn}
+         
         >
-          <motion.div className="text-center mb-12" variants={slideUp}>
+          <div className="text-center mb-12" >
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
               Brand Doctor Diagnosis
             </h2>
@@ -233,11 +165,11 @@ export default function IndexPage() {
               Get a free instant analysis of your brand's digital health and
               discover growth opportunities in under 30 seconds.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
+          <div
             className="max-w-2xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gray-700 shadow-lg"
-            variants={scaleUp}
+            
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-blue-500/10 rounded-full">
@@ -250,17 +182,14 @@ export default function IndexPage() {
 
             <BrandAnalysisForm />
 
-            <motion.div
+            <div
               className="mt-6 flex items-center gap-2 text-sm text-gray-400"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
             >
               <Check className="w-4 h-4 text-green-400" />
               <span>Privacy-first analysis. We never store your data.</span>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section
@@ -272,25 +201,19 @@ export default function IndexPage() {
         className="relative flex flex-col gap-6"
         ref={ref}
       >
-        <motion.div
+        <div
           className="py-10 md:py-10 relative z-0"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeIn}
+          
         >
-          <motion.div className="text-center mb-12 md:mb-16" variants={slideUp}>
+          <div className="text-center mb-12 md:mb-16" >
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
               Your End-to-End Growth & Tech Partner
             </h2>
-          </motion.div>
+          </div>
 
-          <motion.div
+          <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-100px" }}
+            
           >
             {[
               {
@@ -319,62 +242,35 @@ export default function IndexPage() {
                 desc: "DApps, tokenomics, NFT campaigns, and more",
               },
             ].map((service, idx) => (
-              <motion.div
+              <div
                 key={idx}
                 className="bg-gradient-to-br from-slate-900 to-gray-950 p-6 rounded-xl hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:translate-y-[-5px] border border-gray-700"
-                variants={item}
-                whileHover={{
-                  y: -10,
-                  boxShadow:
-                    "0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04)",
-                }}
+                
               >
                 <div className="text-4xl mb-4">
-                  <motion.img
+                  <img
                     width={50}
                     src={service.icon}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.1 * idx, type: "spring" }}
+                    
                   />
                 </div>
                 <h3 className="text-xl font-bold mb-2 text-white">
                   {service.title}
                 </h3>
                 <p className="text-gray-300">{service.desc}</p>
-              </motion.div>
+              </div>
             ))}
 
-            <motion.div
+            <div
               className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-xl text-white hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 hover:translate-y-[-5px] border border-purple-500/30"
-              variants={item}
-              whileHover={{
-                y: -10,
-                scale: 1.02,
-                boxShadow: "0 20px 25px -5px rgba(168, 85, 247, 0.3)",
-              }}
-              animate={{
-                backgroundPosition: ["0% 0%", "100% 100%"],
-              }}
-              transition={{
-                backgroundPosition: {
-                  duration: 8,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "linear",
-                },
-              }}
+              
+              
             >
               <div className="text-4xl mb-4">
-                <motion.img
+                <img
                   width={50}
                   src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746713887/star_cwjdh1.png"
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
+                  
                 />
               </div>
               <h3 className="text-xl font-bold mb-2">Custom Solutions</h3>
@@ -382,9 +278,9 @@ export default function IndexPage() {
                 Need something unique? Let's build a solution tailored to your
                 business goals.
               </p>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* OUR WORKS - DARK MODE - COMPACT */}
@@ -395,112 +291,97 @@ export default function IndexPage() {
         data-aos-duration="1000"
         data-aos-once="false"
       >
-        <motion.div
+        <div
           className="p-8 bg-gray-950 text-gray-100 border border-gray-700 rounded-md"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeIn}
+          
         >
-          <motion.h2
+          <h2
             className="text-3xl font-bold mb-1 text-center"
-            variants={slideUp}
+            
           >
             Our Works
-          </motion.h2>
-          <motion.p
+          </h2>
+          <p
             className="text-center mb-8 text-xl text-gray-300"
-            variants={slideUp}
+            
           >
             Real Brands. Real Results.
-          </motion.p>
+          </p>
 
-          <motion.div className="relative" variants={scaleUp}>
+          <div className="relative">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-xl font-medium flex items-center text-gray-100">
-                <motion.span
+                <span
                   className="text-3xl mr-3"
-                  whileHover={{ scale: 1.05 }}
+                 
                 >
                   {typeof works[currentWork].icon === "string" &&
                   works[currentWork].icon.startsWith("https://") ? (
-                    <motion.img
+                    <img
                       src={works[currentWork].icon}
                       alt="Brand icon"
                       width={120}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                     
                       key={currentWork}
                     />
                   ) : (
                     works[currentWork].icon
                   )}
-                </motion.span>
+                </span>
               </h3>
               <div className="flex space-x-2">
-                <motion.button
+                <button
                   onClick={prevWork}
                   className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  
                 >
                   <ArrowBigLeft className="w-4 h-4" />
-                </motion.button>
-                <motion.button
+                </button>
+                <button
                   onClick={nextWork}
                   className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  
                 >
                   <ArrowBigRight className="w-4 h-4" />
-                </motion.button>
+                </button>
               </div>
             </div>
 
-            <AnimatePresence mode="wait">
-              <motion.div
+            <div >
+              <div
                 key={currentWork}
                 className="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700"
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.5 }}
+                
               >
                 <div className="aspect-[16/6] bg-slate-950 w-full relative overflow-hidden grid grid-cols-2 grid-rows-2 gap-0">
                   {/* Left half (full height) */}
-                  <motion.div
+                  <div
                     className="col-span-1 row-span-2 relative overflow-hidden"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
+                    
                   >
                     <img
                       src={works[currentWork].image1}
                       alt={works[currentWork].desc}
                       className="w-full h-full object-cover"
                     />
-                  </motion.div>
+                  </div>
 
                   {/* Top right quarter */}
-                  <motion.div
+                  <div
                     className="col-span-1 row-span-1 relative overflow-hidden border-l  border-b border-gray-700"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
+                    
                   >
                     <img
                       src={works[currentWork].image}
                       alt={works[currentWork].desc}
                       className="w-full h-full object-contain bg-white"
                     />
-                  </motion.div>
+                  </div>
 
                   {/* Bottom right quarter */}
-                  <motion.div
+                  <div
                     className="col-span-1 row-span-1 relative overflow-hidden border-l border-gray-700"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
+                    
                   >
                     <img
                       src={works[currentWork].image}
@@ -508,79 +389,67 @@ export default function IndexPage() {
                       className="w-full h-full object-cover"
                       style={{ objectPosition: "right bottom" }}
                     />
-                  </motion.div>
+                  </div>
                 </div>
                 <div className="p-4">
                   <div className="flex items-center mb-3">
-                    <motion.div
+                    <div
                       className="w-10 h-10 rounded-full border-1 border-blue-900 flex items-center justify-center text-xl mr-3 text-blue-300 overflow-hidden"
-                      whileHover={{ scale: 1.1 }}
+                   
                     >
                       <img
                         src={works[currentWork].avatar}
                         alt="Brand icon"
                         className="w-full h-full object-contain"
                       />
-                    </motion.div>
+                    </div>
                     <div>
                       <h4 className="font-bold text-gray-100 text-sm">
                         {works[currentWork].name}
                       </h4>
                       <div className="flex">
                         {[1, 2, 3, 4, 5].map((star) => (
-                          <motion.div
+                          <div
                             key={star}
-                            whileHover={{ scale: 1.3 }}
-                            whileTap={{ scale: 0.8 }}
+                            
                           >
                             <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                          </motion.div>
+                          </div>
                         ))}
                       </div>
                     </div>
                   </div>
-                  <motion.p
+                  <p
                     className="italic text-gray-400 text-sm mb-2"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
+                    
                   >
                     "400Brands transformed our business completely. The ROI has
                     been incredible!"
-                  </motion.p>
-                  <motion.p
+                  </p>
+                  <p
                     className="text-blue-300 font-medium text-sm"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7 }}
+                    
                   >
                     {works[currentWork].desc}
-                  </motion.p>
+                  </p>
                 </div>
-              </motion.div>
-            </AnimatePresence>
+              </div>
+            </div>
 
             <div className="flex justify-center mt-4">
               {works.map((_, idx) => (
-                <motion.button
+                <button
                   key={idx}
                   className={`w-2 h-2 mx-1 rounded-full ${
                     idx === currentWork ? "bg-blue-500" : "bg-gray-700"
                   }`}
                   onClick={() => setCurrentWork(idx)}
-                  whileHover={{ scale: 1.5 }}
-                  whileTap={{ scale: 0.8 }}
-                  animate={{
-                    width: idx === currentWork ? 16 : 8,
-                    backgroundColor:
-                      idx === currentWork ? "#3b82f6" : "#374151",
-                  }}
-                  transition={{ duration: 0.2 }}
+                  
                 />
               ))}
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </section>
 
       <section
@@ -591,31 +460,25 @@ export default function IndexPage() {
         data-aos-once="false"
       >
         {/* PRICING PLANS - DARK MODE */}
-        <motion.div
+        <div
           className="py-12 text-gray-100"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeIn}
         >
-          <motion.h2
+          <h2
             className="text-3xl font-bold mb-2 text-center"
-            variants={slideUp}
+          
           >
             Pricing Plans
-          </motion.h2>
-          <motion.p
+          </h2>
+          <p
             className="text-center mb-12 text-xl text-gray-300"
-            variants={slideUp}
+          
           >
             Simple Tiers, Big Impact
-          </motion.p>
+          </p>
 
-          <motion.div
+          <div
             className="text-center mb-16"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+          
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
               Choose Your Growth Path
@@ -624,48 +487,38 @@ export default function IndexPage() {
               Built on Brian Chesky's philosophy of creating 10-star experiences
               that turn customers into lifelong advocates
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
+          <div
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-100px" }}
+            
           >
             {/* Starter Kit */}
-            <motion.div
+            <div
               className="border border-gray-700 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-gray-800"
-              variants={item}
-              whileHover={{ y: -10 }}
+             
+            
             >
-              <motion.div
+              <div
                 className="p-6 bg-gradient-to-br from-slate-900 to-gray-950 border-b border-gray-700"
-                whileHover={{ scale: 1.02 }}
+              
               >
                 <h3 className="text-2xl font-bold mb-1 flex flex-row gap-2">
                   <Flame className="text-blue-500" /> Starter Kit
                 </h3>
                 <div className="flex items-end">
-                  <motion.span
+                  <span
                     className="text-3xl font-bold"
-                    animate={{
-                      scale: [1, 1.05, 1],
-                      transition: {
-                        duration: 2,
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                      },
-                    }}
+                    
                   >
                     ₦150,000
-                  </motion.span>
+                  </span>
                   <span className="text-gray-400 ml-2">/ $99</span>
                 </div>
                 <p className="mt-2 text-sm text-gray-400">
                   Perfect for new professionals & small shops
                 </p>
-              </motion.div>
+              </div>
               <div className="p-6">
                 <ul className="space-y-3 text-gray-300">
                   {[
@@ -677,79 +530,63 @@ export default function IndexPage() {
                     "Mobile-Optimized Design That Converts",
                     "Lifetime Security Updates",
                   ].map((feature, idx) => (
-                    <motion.li
+                    <li
                       key={idx}
                       className="flex items-start"
-                      whileHover={{ x: 5 }}
+                      
                     >
-                      <motion.div
-                        whileHover={{ scale: 1.2 }}
+                      <div
+                       
                         className="mt-0.5"
                       >
                         <Check className="w-5 h-5 text-green-400 mr-2 flex-shrink-0" />
-                      </motion.div>
+                      </div>
                       <span className="text-sm">{feature}</span>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
 
-                <motion.button
+                <button
                   className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium py-3 rounded-lg"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                 
                 >
                   Launch Your Digital Presence →
-                </motion.button>
+                </button>
               </div>
-            </motion.div>
+            </div>
 
             {/* Growth Bundle */}
-            <motion.div
+            <div
               className="border-2 border-emerald-500 rounded-xl overflow-hidden shadow-lg relative bg-gray-800"
-              variants={item}
-              whileHover={{ y: -10 }}
+              
             >
-              <motion.div
+              <div
                 className="absolute top-0 right-0 bg-emerald-600 text-white text-xs px-3 py-1 rounded-bl-lg"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  transition: {
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                  },
-                }}
+               
               >
                 POPULAR
-              </motion.div>
-              <motion.div
+              </div>
+              <div
                 className="p-6 bg-gradient-to-br from-emerald-900 to-teal-950 border-b border-emerald-800"
-                whileHover={{ scale: 1.02 }}
+                
               >
                 <h3 className="text-2xl font-bold mb-1 flex flex-row gap-2">
                   {" "}
                   <Heart className="text-[#FF0098]" /> Growth Bundle
                 </h3>
                 <div className="flex items-end">
-                  <motion.span
+                  <span
                     className="text-3xl font-bold"
-                    animate={{
-                      scale: [1, 1.05, 1],
-                      transition: {
-                        duration: 2,
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                      },
-                    }}
+                    
                   >
                     ₦450,000
-                  </motion.span>
+                  </span>
                   <span className="text-gray-400 ml-2">/ $299</span>
                 </div>
                 <p className="mt-2 text-sm text-gray-400">
                   Best for businesses ready to grow online
                 </p>
-              </motion.div>
+              </div>
               <div className="p-6">
                 <ul className="space-y-3 text-gray-300">
                   {[
@@ -763,66 +600,57 @@ export default function IndexPage() {
                     "API Integrations (CRM, Payment, Social Proof)",
                     "Monthly Strategy & Optimization Call (3 Months)",
                   ].map((feature, idx) => (
-                    <motion.li
+                    <li
                       key={idx}
                       className="flex items-start"
-                      whileHover={{ x: 5 }}
+                     
                     >
-                      <motion.div
-                        whileHover={{ scale: 1.2 }}
+                      <div
+                        
                         className="mt-0.5"
                       >
                         <Check className="w-5 h-5 text-emerald-400 mr-2 flex-shrink-0" />
-                      </motion.div>
+                      </div>
                       <span className="text-sm">{feature}</span>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
 
-                <motion.button
+                <button
                   className="w-full mt-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-medium py-3 rounded-lg"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                 
                 >
                   Accelerate Your Growth →
-                </motion.button>
+                </button>
               </div>
-            </motion.div>
+            </div>
 
             {/* Brand Master Plan */}
-            <motion.div
+            <div
               className="border border-gray-700 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-gray-800"
-              variants={item}
-              whileHover={{ y: -10 }}
+             
             >
-              <motion.div
+              <div
                 className="p-6 bg-gradient-to-br from-purple-900 to-indigo-950 border-b border-gray-700"
-                whileHover={{ scale: 1.02 }}
+                
               >
                 <h3 className="text-2xl font-bold mb-1 flex flex-row gap-2 ">
                   <Star className="text-yellow-500" />
                   Brand Master Plan
                 </h3>
                 <div className="flex items-end">
-                  <motion.span
+                  <span
                     className="text-3xl font-bold"
-                    animate={{
-                      scale: [1, 1.05, 1],
-                      transition: {
-                        duration: 2,
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                      },
-                    }}
+                    
                   >
                     ₦950,000
-                  </motion.span>
+                  </span>
                   <span className="text-gray-400 ml-2">/ $599</span>
                 </div>
                 <p className="mt-2 text-sm text-gray-400">
                   For serious brands & growing companies
                 </p>
-              </motion.div>
+              </div>
               <div className="p-6">
                 <ul className="space-y-3 text-gray-300">
                   {[
@@ -839,44 +667,36 @@ export default function IndexPage() {
                     "Custom Integrations + API Development",
                     "Native Mobile App Development (iOS + Android)",
                   ].map((feature, idx) => (
-                    <motion.li
+                    <li
                       key={idx}
                       className="flex items-start"
-                      whileHover={{ x: 5 }}
+                     
                     >
-                      <motion.div
-                        whileHover={{ scale: 1.2 }}
+                      <div
+                       
                         className="mt-0.5"
                       >
                         <Check className="w-5 h-5 text-purple-400 mr-2 flex-shrink-0" />
-                      </motion.div>
+                      </div>
                       <span className="text-sm">{feature}</span>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
 
-                <motion.button
+                <button
                   className="w-full mt-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium py-3 rounded-lg"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                 
                 >
                   Dominate Your Market →
-                </motion.button>
+                </button>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Custom Plan */}
-          <motion.div
+          <div
             className="mt-8 bg-gradient-to-r from-purple-900 to-blue-900 rounded-xl p-8 text-white border border-purple-700"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            whileHover={{
-              y: -5,
-              boxShadow: "0 10px 25px -5px rgba(139, 92, 246, 0.3)",
-            }}
+           
           >
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div>
@@ -890,17 +710,16 @@ export default function IndexPage() {
                   needs.
                 </p>
               </div>
-              <motion.button
+              <button
                 className="mt-6 md:mt-0 bg-gray-800 text-blue-300 hover:bg-gray-700 font-medium px-6 py-3 rounded-lg flex items-center border border-blue-700"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+               
               >
                 <Phone className="w-4 h-4 mr-2" />
                 <span>Schedule Your Custom Brief</span>
-              </motion.button>
+              </button>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </section>
 
       <section
@@ -911,118 +730,83 @@ export default function IndexPage() {
         data-aos-once="false"
       >
         {/* WHY 400BRANDS */}
-        <motion.div
+        <div
           className="py-12 text-gray-100"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeIn}
+          
         >
-          <motion.h2
+          <h2
             className="text-3xl font-bold mb-12 text-center"
-            variants={slideUp}
+          
           >
             Why 400Brands?
-          </motion.h2>
+          </h2>
 
-          <motion.div
+          <div
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-100px" }}
+           
+           
           >
-            <motion.div
+            <div
               className="flex flex-col items-center text-center p-6 bg-gray-950 rounded-xl shadow-md border border-gray-700"
-              variants={item}
-              whileHover={{
-                y: -10,
-                borderColor: "#3b82f6",
-                boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1)",
-              }}
+              
             >
-              <motion.div
+              <div
                 className="w-16 h-16 bg-blue-900 rounded-full flex items-center justify-center mb-4"
-                whileHover={{ rotate: 360 }}
-                transition={{ duration: 1 }}
+                
               >
                 <img
                   src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746723502/checklist_ymxzrd.png"
                   width={90}
                 />
-              </motion.div>
+              </div>
               <h3 className="text-xl font-bold mb-2">Affordable Excellence</h3>
               <p className="text-gray-400">
                 Premium quality at budget-friendly prices for African
                 businesses.
               </p>
-            </motion.div>
+            </div>
 
-            <motion.div
+            <div
               className="flex flex-col items-center text-center p-6 bg-gray-950 rounded-xl shadow-md border border-gray-700"
-              variants={item}
-              whileHover={{
-                y: -10,
-                borderColor: "#a855f7",
-                boxShadow: "0 10px 25px -5px rgba(168, 85, 247, 0.1)",
-              }}
+              
             >
-              <motion.div
+              <div
                 className="w-16 h-16 bg-purple-900 rounded-full flex items-center justify-center mb-4"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  transition: {
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                  },
-                }}
+                
               >
                 <img
                   src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746723633/forecasting_tbrc7h.png"
                   width={90}
                 />
-              </motion.div>
+              </div>
               <h3 className="text-xl font-bold mb-2">Future-Tech Ready</h3>
               <p className="text-gray-400">
                 AI, Web3, and Automation solutions for tomorrow's challenges.
               </p>
-            </motion.div>
+            </div>
 
-            <motion.div
+            <div
               className="flex flex-col items-center text-center p-6 bg-gray-950 rounded-xl shadow-md border border-gray-700"
-              variants={item}
-              whileHover={{
-                y: -10,
-                borderColor: "#f59e0b",
-                boxShadow: "0 10px 25px -5px rgba(245, 158, 11, 0.1)",
-              }}
+              
             >
-              <motion.div
+              <div
                 className="w-16 h-16 bg-yellow-900 rounded-full flex items-center justify-center mb-4"
-                animate={{
-                  rotate: [0, 10, -10, 0],
-                  transition: {
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                  },
-                }}
+                
               >
                 <img
                   src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746723859/analysis_nnspfu.png"
                   width={90}
                 />
-              </motion.div>
+              </div>
               <h3 className="text-xl font-bold mb-2">
                 Data-driven & Design-forward
               </h3>
               <p className="text-gray-400">
                 Beautiful solutions backed by real metrics and analytics.
               </p>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </div>
+          </div>
+        </div>
       </section>
     </DefaultMain>
   );

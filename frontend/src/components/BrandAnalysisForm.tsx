@@ -1,12 +1,7 @@
-//@ts-nocheck
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { AlertCircle } from "lucide-react";
-import { Select, SelectItem } from "@heroui/select";
 import { Input } from "@heroui/input";
-import type { Selection } from "@heroui/select";
 
 interface Industry {
   key: string;
@@ -108,28 +103,8 @@ const BrandAnalysisForm = () => {
     navigate(`/bake?${params.toString()}`);
   };
 
-  // Handle the Selection type from @heroui/select
-  const handleIndustryChange = (selection: Selection) => {
-    let selectedKey = "";
-
-    if (typeof selection === "string") {
-      // If it's a single selection (string key)
-      selectedKey = selection;
-    } else if (selection instanceof Set && selection.size > 0) {
-      // If it's a Set (for multi-select, or how it's internally represented for single)
-      const firstValue = selection.values().next().value;
-      selectedKey = typeof firstValue === "string" ? firstValue : "";
-    } else if (
-      selection &&
-      typeof selection === "object" &&
-      "currentKey" in selection
-    ) {
-      // Handle other Selection types that might have a currentKey property
-      selectedKey =
-        typeof selection.currentKey === "string" ? selection.currentKey : "";
-    }
-
-    console.log("Industry selected (extracted key):", selectedKey);
+  const handleIndustryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedKey = e.target.value;
     setIndustry(selectedKey);
     if (error) setError(null);
   };
@@ -138,21 +113,11 @@ const BrandAnalysisForm = () => {
   const isBrandNameError = error && !brandName.trim();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-2xl mx-auto"
-    >
+    <div className="w-full max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="w-full">
         <div className="flex flex-col gap-4">
           {/* Brand Name Input */}
-          <motion.div
-            className="flex-1 relative"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-          >
+          <div className="flex-1 relative">
             <Input
               type="text"
               label="Brand Name"
@@ -173,90 +138,68 @@ const BrandAnalysisForm = () => {
                 label: "text-gray-300 font-medium",
               }}
             />
-          </motion.div>
+          </div>
 
           {/* Industry Selection */}
-          <motion.div
-            className="flex-1 relative"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Select
-              label="Industry"
-              placeholder="Select your industry"
-              selectedKeys={industry ? new Set([industry]) : new Set()}
-              onSelectionChange={handleIndustryChange}
-              isRequired
-              variant="bordered"
-              classNames={{
-                base: "w-full",
-                trigger: `bg-gray-700/50 border ${
+          <div className="flex-1 relative">
+            <label className="block text-gray-300 font-medium mb-1">
+              Industry <span className="text-red-500">*</span>
+            </label>
+            <div className="relative">
+              <select
+                value={industry}
+                onChange={handleIndustryChange}
+                required
+                className={`w-full px-3 py-2.5 bg-gray-700/50 border ${
                   isIndustryError ? "border-red-500/80" : "border-gray-600"
-                } hover:border-gray-500 focus:border-blue-500 text-white`,
-                label: "text-gray-300 font-medium",
-                value: "text-white",
-                popoverContent: "bg-gray-800 border-gray-600",
-                listbox: "bg-gray-800",
-              }}
-            >
-              {industries.map((industryItem) => (
-                <SelectItem
-                  key={industryItem.key}
-                  
-                  classNames={{
-                    base: "text-white hover:bg-gray-700 data-[selected=true]:bg-blue-600",
-                  }}
+                } hover:border-gray-500 focus:border-blue-500 text-white rounded-lg appearance-none transition-all duration-200 pr-8`}
+              >
+                <option value="">Select your industry</option>
+                {industries.map((industryItem) => (
+                  <option
+                    key={industryItem.key}
+                    value={industryItem.key}
+                    className="bg-gray-800 text-white hover:bg-blue-600"
+                  >
+                    {industryItem.label}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
                 >
-                  {industryItem.label}
-                </SelectItem>
-              ))}
-            </Select>
-          </motion.div>
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+          </div>
 
           {/* Error Message */}
-          <AnimatePresence>
+          <div>
             {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3"
-              >
+              <div className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
                 <span>{error}</span>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
+          </div>
 
           {/* Submit Button */}
-          <motion.button
+          <button
             type="submit"
             className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
           >
             <span className="flex items-center justify-center gap-2">
               Analyze Brand
-              <motion.div
-                animate={{ x: [0, 4, 0] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 1.5,
-                  ease: "easeInOut",
-                }}
-              >
-                →
-              </motion.div>
+              <span>→</span>
             </span>
-          </motion.button>
+          </button>
         </div>
       </form>
-    </motion.div>
+    </div>
   );
 };
 

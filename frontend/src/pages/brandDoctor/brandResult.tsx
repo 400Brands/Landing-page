@@ -1,25 +1,52 @@
 //@ts-nocheck
 
 import { useState, useEffect } from "react";
-import { Check, X, ShieldCheck, Star, TrendingUp, Eye } from "lucide-react";
-import { Modal, ModalContent, ModalBody, useDisclosure } from "@heroui/react";
+import {
+  Check,
+  X,
+  ShieldCheck,
+
+  TrendingUp,
+  Eye,
+  Search,
+  MousePointer,
+  Globe,
+
+  FileText,
+  MessageSquare,
+  Target,
+  BarChart3,
+  Heart,
+  Crown,
+  Lock,
+  Zap,
+  AlertTriangle,
+} from "lucide-react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@heroui/react";
+
+interface BenchmarkItem {
+  text: string;
+  present: boolean;
+  impact?: string; // Revenue leak description
+}
+
+interface Benchmark {
+  title: string;
+  score: number;
+  items: BenchmarkItem[];
+  moneyLeak: string; // Main revenue leak insight
+  isPaid?: boolean; // Whether this is a paid metric
+}
 
 interface BrandResultsDisplayProps {
   brandName: string;
   industry: string;
   score: number;
   medal: string;
-  authenticityBenchmarks?: {
-    title: string;
-    score: number;
-    items: { text: string; present: boolean }[];
-  }[];
-  techBenchmarks?: {
-    title: string;
-    score: number;
-    items: { text: string; present: boolean }[];
-  }[];
+  freeMetrics?: Benchmark[];
+  paidMetrics?: Benchmark[];
   summary?: string;
+  isPremiumUser?: boolean;
 }
 
 const BrandResultsDisplay = ({
@@ -27,13 +54,17 @@ const BrandResultsDisplay = ({
   industry = "Technology",
   score = 78,
   medal = "Gold",
-  authenticityBenchmarks,
-  techBenchmarks,
+  freeMetrics,
+  paidMetrics,
   summary,
+  isPremiumUser = false,
 }: BrandResultsDisplayProps) => {
   const [displayScore, setDisplayScore] = useState(0);
   const [animationComplete, setAnimationComplete] = useState(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+ 
+  const [activeTab, setActiveTab] = useState<"free" | "paid">("free");
+
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   // Dynamic styling based on score
   const getScoreBasedStyling = (score: number) => {
@@ -72,9 +103,9 @@ const BrandResultsDisplay = ({
 
   const scoreStyles = getScoreBasedStyling(score);
 
-  // Optimized counter animation
+  // Score animation
   useEffect(() => {
-    const duration = 1500; // Reduced from 2000
+    const duration = 1500;
     const startTime = Date.now();
 
     const animate = () => {
@@ -94,373 +125,338 @@ const BrandResultsDisplay = ({
     requestAnimationFrame(animate);
   }, [score]);
 
-  // Default Business Authenticity metrics (fallback if AI doesn't provide data)
-  const defaultAuthenticityBenchmarks = [
-    {
-      title: "Legal Compliance",
-      items: [
-        { text: "CAC Registration verified", present: true },
-        { text: "Valid TIN available", present: true },
-        { text: "Corporate bank account", present: false },
-      ],
-      icon: <ShieldCheck className="text-green-500" size={18} />,
-      score: 67,
-    },
-    {
-      title: "Digital Presence",
-      items: [
-        { text: "Professional website (.com/.ng)", present: true },
-        { text: "Business domain email", present: false },
-        { text: "Active social media profiles", present: true },
-      ],
-      icon: <Check className="text-blue-500" size={18} />,
-      score: 67,
-    },
-    {
-      title: "Reputation Management",
-      items: [
-        { text: "Positive online reviews", present: true },
-        { text: "No legal disputes", present: true },
-        { text: "Verified partnerships", present: false },
-      ],
-      icon: <ShieldCheck className="text-purple-500" size={18} />,
-      score: 67,
-    },
-  ];
+  
 
-  // Default Tech & Growth metrics (fallback if AI doesn't provide data)
-  const defaultTechBenchmarks = [
-    {
-      title: "Technical Maturity",
-      items: [
-        { text: "Mobile-responsive website", present: true },
-        { text: "HTTPS secured", present: true },
-        { text: "Modern tech tools (CRM, payments)", present: false },
-      ],
-      icon: <TrendingUp className="text-emerald-500" size={18} />,
-      score: 67,
-    },
-    {
-      title: "Brand Consistency",
-      items: [
-        { text: "Uniform branding across platforms", present: false },
-        { text: "Professional content marketing", present: true },
-        { text: "Active in tech communities", present: true },
-      ],
-      icon: <Star className="text-amber-500" size={18} />,
-      score: 67,
-    },
-    {
-      title: "Risk Assessment",
-      items: [
-        { text: "No impersonation detected", present: true },
-        { text: "Physical address verified", present: false },
-        { text: "No fake claims identified", present: true },
-      ],
-      icon: <X className="text-red-500" size={18} />,
-      score: 67,
-    },
-  ];
+  const finalFreeMetrics = freeMetrics 
+  const finalPaidMetrics = paidMetrics 
 
-  // Use AI data if available, otherwise use defaults
-  const finalAuthenticityBenchmarks =
-    authenticityBenchmarks || defaultAuthenticityBenchmarks;
-  const finalTechBenchmarks = techBenchmarks || defaultTechBenchmarks;
-
-  // Add icons to AI-generated benchmarks
-  const addIconsToAuthenticityBenchmarks = (benchmarks) => {
+  // Icon mapping for metrics
+  const getMetricIcon = (title: string) => {
     const iconMap = {
-      "Legal Compliance": <ShieldCheck className="text-green-500" size={18} />,
-      "Digital Presence": <Check className="text-blue-500" size={18} />,
-      "Reputation Management": (
-        <ShieldCheck className="text-purple-500" size={18} />
+      "Search Visibility Score": <Search className="text-blue-400" size={18} />,
+      "Website Conversion Readiness": (
+        <MousePointer className="text-green-400" size={18} />
+      ),
+      "Digital Presence Score": <Globe className="text-purple-400" size={18} />,
+      "Trust & Credibility Signals": (
+        <ShieldCheck className="text-emerald-400" size={18} />
+      ),
+      "Content Authority Index": (
+        <FileText className="text-amber-400" size={18} />
+      ),
+      "Social Proof & Mentions": (
+        <MessageSquare className="text-pink-400" size={18} />
+      ),
+      "Top 3 Competitor Advantage Analysis": (
+        <Target className="text-red-400" size={18} />
+      ),
+      "Marketing Funnel Strength Assessment": (
+        <BarChart3 className="text-indigo-400" size={18} />
+      ),
+      "Engagement-to-Conversion Ratio": (
+        <Heart className="text-rose-400" size={18} />
+      ),
+      "Perceived Brand Authority Score": (
+        <Crown className="text-yellow-400" size={18} />
       ),
     };
-    return benchmarks.map((benchmark) => ({
-      ...benchmark,
-      icon: iconMap[benchmark.title] || (
-        <Check className="text-blue-500" size={18} />
-      ),
-    }));
+    return iconMap[title] || <TrendingUp className="text-gray-400" size={18} />;
   };
 
-  const addIconsToTechBenchmarks = (benchmarks) => {
-    const iconMap = {
-      "Technical Maturity": (
-        <TrendingUp className="text-emerald-500" size={18} />
-      ),
-      "Brand Consistency": <Star className="text-amber-500" size={18} />,
-      "Risk Assessment": <X className="text-red-500" size={18} />,
-    };
-    return benchmarks.map((benchmark) => ({
-      ...benchmark,
-      icon: iconMap[benchmark.title] || (
-        <TrendingUp className="text-emerald-500" size={18} />
-      ),
-    }));
-  };
-
-  const authenticityBenchmarksWithIcons = addIconsToAuthenticityBenchmarks(
-    finalAuthenticityBenchmarks
-  );
-  const techBenchmarksWithIcons = addIconsToTechBenchmarks(finalTechBenchmarks);
-
-  const circumference = 2 * Math.PI * 32; // Reduced from 42
+  const circumference = 2 * Math.PI * 32;
   const strokeDasharray = circumference;
   const strokeDashoffset = circumference - (displayScore / 100) * circumference;
 
-  const MetricSection = ({
-    title,
-    benchmarks,
-    icon,
-    bgColor,
-    borderColor,
-  }: any) => (
-    <div
-      className={`bg-gradient-to-br ${bgColor} rounded-xl border ${borderColor} overflow-hidden`}
-    >
+  const MetricCard = ({
+    metric
+  }: {
+    metric: Benchmark;
+    index: number;
+  }) => (
+    <div className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 rounded-xl border border-gray-700 overflow-hidden hover:border-gray-600 transition-all duration-300">
       <div className="p-4 border-b border-gray-700">
-        <div className="flex items-center">
-          <div className="w-8 h-8 bg-gray-800/50 rounded-full flex items-center justify-center mr-2">
-            {icon}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="w-10 h-10 bg-gray-800/50 rounded-full flex items-center justify-center mr-3">
+              {getMetricIcon(metric.title)}
+            </div>
+            <div>
+              <h4 className="text-lg font-bold text-white">{metric.title}</h4>
+              <div className="flex items-center mt-1">
+                <span
+                  className="text-xs font-bold px-2 py-1 rounded-full mr-2"
+                  style={{
+                    color:
+                      metric.score >= 80
+                        ? "#10B981"
+                        : metric.score >= 60
+                          ? "#F59E0B"
+                          : "#EF4444",
+                    backgroundColor:
+                      metric.score >= 80
+                        ? "#10B98110"
+                        : metric.score >= 60
+                          ? "#F59E0B10"
+                          : "#EF444410",
+                  }}
+                >
+                  {metric.score}%
+                </span>
+              </div>
+            </div>
           </div>
-          <h4 className="text-lg font-bold text-white">{title}</h4>
+          {metric.isPaid && (
+            <div className="flex items-center">
+              <Lock className="text-amber-400 mr-1" size={16} />
+              <span className="text-xs text-amber-400 font-medium">
+                PREMIUM
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="p-4 space-y-4">
-        {benchmarks.map((benchmark, index) => (
-          <div key={index} className="space-y-2">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                {benchmark.icon}
-                <h5 className="font-medium text-white ml-2 text-sm">
-                  {benchmark.title}
-                </h5>
-              </div>
-              <span
-                className="text-xs font-bold px-2 py-1 rounded-full"
-                style={{
-                  color:
-                    benchmark.score >= 80
-                      ? "#10B981"
-                      : benchmark.score >= 60
-                        ? "#F59E0B"
-                        : "#EF4444",
-                  backgroundColor:
-                    benchmark.score >= 80
-                      ? "#10B98110"
-                      : benchmark.score >= 60
-                        ? "#F59E0B10"
-                        : "#EF444410",
-                }}
-              >
-                {benchmark.score}%
-              </span>
-            </div>
-
-            <div className="w-full bg-gray-800 rounded-full h-1.5">
-              <div
-                className="h-1.5 rounded-full transition-all duration-1000 ease-out"
-                style={{
-                  width: animationComplete ? `${benchmark.score}%` : "0%",
-                  backgroundColor:
-                    benchmark.score >= 80
-                      ? "#10B981"
-                      : benchmark.score >= 60
-                        ? "#F59E0B"
-                        : "#EF4444",
-                }}
+      <div className="p-4">
+        {/* Money Leak Insight - Only show if at least one item is not present */}
+        {metric.items.some((item) => !item.present) && (
+          <div className="mb-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+            <div className="flex items-start">
+              <AlertTriangle
+                className="text-red-400 mr-2 mt-0.5 flex-shrink-0"
+                size={16}
               />
+              <div>
+                <h5 className="text-red-300 font-medium text-sm mb-1">
+                  Revenue Leak
+                </h5>
+                <p className="text-red-200 text-xs">{metric.moneyLeak}</p>
+              </div>
             </div>
-
-            <ul className="space-y-1">
-              {benchmark.items.map((item, i) => (
-                <li key={i} className="flex items-start text-xs">
-                  {item.present ? (
-                    <Check className="flex-shrink-0 h-3 w-3 text-green-500 mt-0.5" />
-                  ) : (
-                    <X className="flex-shrink-0 h-3 w-3 text-red-500 mt-0.5" />
-                  )}
-                  <span
-                    className={`ml-1 ${
-                      item.present ? "text-gray-300" : "text-gray-500"
-                    }`}
-                  >
-                    {item.text}
-                  </span>
-                </li>
-              ))}
-            </ul>
           </div>
-        ))}
+        )}
+
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-800 rounded-full h-2 mb-4">
+          <div
+            className="h-2 rounded-full transition-all duration-1000 ease-out"
+            style={{
+              width: animationComplete ? `${metric.score}%` : "0%",
+              backgroundColor:
+                metric.score >= 80
+                  ? "#10B981"
+                  : metric.score >= 60
+                    ? "#F59E0B"
+                    : "#EF4444",
+            }}
+          />
+        </div>
+
+        {/* Data Points */}
+        <ul className="space-y-2">
+          {metric.items.map((item, i) => (
+            <li key={i} className="flex items-start text-xs">
+              {item.present ? (
+                <Check className="flex-shrink-0 h-3 w-3 text-green-500 mt-0.5 mr-2" />
+              ) : (
+                <X className="flex-shrink-0 h-3 w-3 text-red-500 mt-0.5 mr-2" />
+              )}
+              <div className="flex-1">
+                <span
+                  className={`${item.present ? "text-gray-300" : "text-gray-500"}`}
+                >
+                  {item.text}
+                </span>
+                {item.impact && (
+                  <p className="text-gray-400 text-xs mt-1 italic">
+                    {item.impact}
+                  </p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+
+  const PaidWallOverlay = () => (
+    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/95 via-gray-900/60 to-transparent rounded-xl flex items-center justify-center backdrop-blur-sm">
+      <div className="text-center p-6">
+        <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-gray-500 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Lock className="text-white" size={24} />
+        </div>
+        <h3 className="text-xl font-bold text-white mb-2">Premium Insights</h3>
+        <p className="text-gray-300 text-sm mb-4 max-w-xs">
+          Unlock deep revenue opportunity analysis and competitor intelligence
+        </p>
+        <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-full font-medium hover:from-amber-600 hover:to-orange-600 transition-all duration-200 shadow-lg">
+          <Zap className="inline mr-2" size={16} />
+          SignUp
+        </button>
       </div>
     </div>
   );
 
   return (
-    <>
-      <div className="space-y-2 p-2 ">
-        {/* Main Score Display - Now with dynamic styling */}
-        <div
-          className={`max-w-2xl mx-auto ${scoreStyles.bgColor} rounded-2xl overflow-hidden border ${scoreStyles.border} shadow-2xl ${scoreStyles.shadow}`}
-        >
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center">
-              {brandName}'s Brand Health Score
-            </h2>
+    <div className="space-y-2 p-4 ">
+      {/* Main Score Display */}
+      <div
+        className={`max-w-2xl mx-auto ${scoreStyles.bgColor} rounded-2xl overflow-hidden border ${scoreStyles.border} shadow-2xl ${scoreStyles.shadow}`}
+      >
+        <div className="p-6">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">
+            {brandName}'s Brand & Market Health
+          </h2>
 
-            <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
-              {/* Score Circle - Reduced size */}
-              <div className="flex-shrink-0">
-                <div className="relative w-48 h-48">
-                  <div className="absolute inset-0 rounded-full border-8 border-gray-800"></div>
-
-                  <svg
-                    className="absolute inset-0 w-full h-full -rotate-90"
-                    viewBox="0 0 100 100"
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-8">
+            {/* Score Circle */}
+            <div className="flex-shrink-0">
+              <div className="relative w-48 h-48">
+                <div className="absolute inset-0 rounded-full border-8 border-gray-800"></div>
+                <svg
+                  className="absolute inset-0 w-full h-full -rotate-90"
+                  viewBox="0 0 100 100"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="none"
+                    strokeWidth="8"
+                    stroke={
+                      medal === "Gold"
+                        ? "#F59E0B"
+                        : medal === "Silver"
+                          ? "#9CA3AF"
+                          : medal === "Bronze"
+                            ? "#B45309"
+                            : "#EF4444"
+                    }
+                    strokeLinecap="round"
+                    strokeDasharray={strokeDasharray}
+                    strokeDashoffset={strokeDashoffset}
+                    style={{ transition: "stroke-dashoffset 1.5s ease-out" }}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-5xl font-bold text-white tabular-nums">
+                    {displayScore}%
+                  </span>
+                  <span className="text-gray-300 text-sm mt-1">
+                    Health Score
+                  </span>
+                  <span
+                    className={`mt-2 inline-flex items-center px-4 py-1 rounded-full font-medium transition-all duration-500 ${
+                      medal === "Gold"
+                        ? "bg-yellow-500 text-yellow-900"
+                        : medal === "Silver"
+                          ? "bg-gray-400 text-gray-900"
+                          : medal === "Bronze"
+                            ? "bg-amber-600 text-amber-100"
+                            : "bg-blue-500 text-white"
+                    }`}
+                    style={{
+                      opacity: animationComplete ? 1 : 0,
+                      transform: animationComplete ? "scale(1)" : "scale(0.8)",
+                    }}
                   >
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="42"
-                      fill="none"
-                      strokeWidth="8"
-                      stroke={
-                        medal === "Gold"
-                          ? "#F59E0B"
-                          : medal === "Silver"
-                            ? "#9CA3AF"
-                            : medal === "Bronze"
-                              ? "#B45309"
-                              : "#EF4444"
-                      }
-                      strokeLinecap="round"
-                      strokeDasharray={strokeDasharray}
-                      strokeDashoffset={strokeDashoffset}
-                      style={{ transition: "stroke-dashoffset 1.5s ease-out" }}
-                    />
-                  </svg>
-
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-5xl font-bold text-white tabular-nums">
-                      {displayScore}%
-                    </span>
-                    <span className="text-gray-300 text-sm mt-1">
-                      Health Score
-                    </span>
-                    <span
-                      className={`mt-2 inline-flex items-center px-4 py-1 rounded-full font-medium transition-all duration-500 ${
-                        medal === "Gold"
-                          ? "bg-yellow-500 text-yellow-900"
-                          : medal === "Silver"
-                            ? "bg-gray-400 text-gray-900"
-                            : medal === "Bronze"
-                              ? "bg-amber-600 text-amber-100"
-                              : "bg-blue-500 text-white"
-                      }`}
-                      style={{
-                        opacity: animationComplete ? 1 : 0,
-                        transform: animationComplete
-                          ? "scale(1)"
-                          : "scale(0.8)",
-                      }}
-                    >
-                      {medal} Level
-                    </span>
-                  </div>
+                    {medal} Level
+                  </span>
                 </div>
               </div>
+            </div>
 
-              {/* Summary Text */}
-              <div className="max-w-md text-center lg:text-left">
-                <h3 className="text-xl font-bold text-white mb-3">
-                  {score >= 75
-                    ? "Excellent Digital Presence!"
-                    : score >= 60
-                      ? "Good, With Growth Potential"
-                      : score >= 45
-                        ? "Needs Strategic Improvement"
-                        : "Urgent Attention Required"}
-                </h3>
-
-                <p className="text-gray-300 mb-4 text-sm leading-relaxed">
-                  {summary ||
-                    (score >= 75
-                      ? `${brandName} is performing exceptionally well in the ${industry} sector. You're ahead of 85% of similar businesses.`
-                      : score >= 60
-                        ? `${brandName} shows good potential in the ${industry} sector. Strategic improvements could boost your competitive edge.`
-                        : score >= 45
-                          ? `${brandName} is performing below average for the ${industry} sector. Key improvements needed for better market position.`
-                          : `${brandName} requires immediate attention to core digital presence issues in the ${industry} sector.`)}
-                </p>
-
-                <div className="flex flex-wrap gap-1.5 mb-4 justify-center lg:justify-start">
-                  {[
-                    "Digital Presence",
-                    "Brand Identity",
-                    "Technical Setup",
-                    "Customer Trust",
-                  ].map((tag, idx) => (
-                    <span
-                      key={idx}
-                      className="bg-gray-800 px-2 py-0.5 rounded-full text-xs text-gray-300 border border-gray-700"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* See Details Button */}
-                <div className="flex item-end justify-end w-full">
-                  <button
-                    onClick={onOpen}
-                    className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm"
-                  >
-                    <Eye className="mr-1.5" size={16} />
-                    Details
-                  </button>
-                </div>
+            {/* Summary */}
+            <div className="max-w-md text-center lg:text-left">
+              <h3 className="text-xl font-bold text-white mb-3">
+                {score >= 75
+                  ? "Strong Foundation, Minor Leaks"
+                  : score >= 60
+                    ? "Good Potential, Revenue Opportunities"
+                    : score >= 45
+                      ? "Significant Revenue Leaks Detected"
+                      : "Critical Revenue Bleeding"}
+              </h3>
+              <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                {summary ||
+                  `We found ${finalFreeMetrics.length + finalPaidMetrics.length} areas where ${brandName} is potentially losing revenue in the ${industry} sector.`}
+              </p>
+              <div className="flex justify-center lg:justify-start">
+                <button
+                  onClick={onOpen}
+                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                >
+                  <Eye className="mr-2" size={18} />
+                  Show Revenue Analysis
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* NextUI Modal */}
+      {/* Detailed Analysis */}
+
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         size="5xl"
-        scrollBehavior="inside"
+        scrollBehavior="outside"
         backdrop="blur"
-        className="bg-gray-900 border border-gray-700"
       >
         <ModalContent>
           <>
-            <ModalBody className="p-6">
-              <div className="grid lg:grid-cols-2 gap-4">
-                <MetricSection
-                  title="Business Authenticity"
-                  benchmarks={authenticityBenchmarksWithIcons}
-                  icon={<ShieldCheck className="text-blue-400" size={18} />}
-                  bgColor="from-blue-950/20 to-slate-900"
-                  borderColor="border-blue-500/30"
-                />
+            <ModalBody>
+              <div className="max-w-7xl mx-auto">
+                {/* Tab Navigation */}
+                <div className="flex bg-gray-800 rounded-lg p-1 mb-6 max-w-md mx-auto">
+                  <button
+                    onClick={() => setActiveTab("free")}
+                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
+                      activeTab === "free"
+                        ? "bg-blue-500 text-white"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    Free Metrics ({finalFreeMetrics.length})
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("paid")}
+                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
+                      activeTab === "paid"
+                        ? "bg-green-500 text-white"
+                        : "text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    <Lock className="inline mr-1" size={14} />
+                    Advanced ({finalPaidMetrics.length})
+                  </button>
+                </div>
 
-                <MetricSection
-                  title="Tech & Growth Metrics"
-                  benchmarks={techBenchmarksWithIcons}
-                  icon={<TrendingUp className="text-purple-400" size={18} />}
-                  bgColor="from-purple-950/20 to-slate-900"
-                  borderColor="border-purple-500/30"
-                />
+                {/* Metrics Grid */}
+                <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {activeTab === "free"
+                    ? finalFreeMetrics.map((metric, index) => (
+                        <MetricCard key={index} metric={metric} index={index} />
+                      ))
+                    : finalPaidMetrics.map((metric, index) => (
+                        <div key={index} className="relative">
+                          <MetricCard metric={metric} index={index} />
+                          {!isPremiumUser && <PaidWallOverlay />}
+                        </div>
+                      ))}
+                </div>
               </div>
-            </ModalBody>
+            </ModalBody>{" "}
+            <ModalFooter>
+              <Button  variant="solid" onPress={onClose}>
+                Close
+              </Button>
+            </ModalFooter>
           </>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   );
 };
 

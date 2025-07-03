@@ -32,7 +32,6 @@
     "@react-types/shared": "3.29.0",
     "aos": "^3.0.0-beta.6",
     "clsx": "2.1.1",
-    "framer-motion": "^11.15.0",
     "ipapi.co": "^0.3.0",
     "lucide-react": "^0.507.0",
     "motion": "^12.11.0",

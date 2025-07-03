@@ -11,7 +11,6 @@ This is a template for creating applications using Vite and HeroUI (v2).
 - [Tailwind CSS](https://tailwindcss.com)
 - [Tailwind Variants](https://tailwind-variants.org)
 - [TypeScript](https://www.typescriptlang.org)
-- [Framer Motion](https://www.framer.com/motion)
 
 ## How to Use
 

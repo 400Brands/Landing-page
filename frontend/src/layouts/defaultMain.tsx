@@ -66,7 +66,7 @@ export default function DefaultMain({ children }: DefaultMainProps) {
           poster="https://res.cloudinary.com/dgbreoalg/image/upload/v1747050845/Screenshot_1_luugsj.png"
         >
           <source
-            src="https://res.cloudinary.com/dgbreoalg/video/upload/v1747322147/bg_video_Trim_exv34i.mp4"
+            src="https://res.cloudinary.com/dgbreoalg/video/upload/v1751546559/Bg_video_Trim_py8qk0.mp4"
             type="video/mp4"
           />
         </video>
@@ -83,7 +83,7 @@ export default function DefaultMain({ children }: DefaultMainProps) {
           poster="https://res.cloudinary.com/dgbreoalg/image/upload/v1747050845/Screenshot_1_luugsj.png"
         >
           <source
-            src="https://res.cloudinary.com/dgbreoalg/video/upload/v1747055518/trimed_xcqkng.mp4"
+            src="https://res.cloudinary.com/dgbreoalg/video/upload/v1751545995/trimed_1_p0nprj.mp4"
             type="video/mp4"
           />
         </video>

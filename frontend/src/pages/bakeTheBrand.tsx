@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { useState, useEffect } from "react";
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import DefaultMain from "@/layouts/defaultMain";
@@ -23,37 +25,54 @@ interface LocationData {
   reason?: string;
 }
 
-// ---
-// Updated Interface: Include competitors
-// ---
+// Competitor interface
 interface Competitor {
   name: string;
-  score: number; // Hypothetical score or general market standing
+  score: number;
   industry: string;
-  rating: number; // Average rating (e.g., from reviews)
-  reviews: number; // Number of reviews
+  rating: number;
+  reviews: number;
   description: string;
   strengths: string[];
-  avatar: string; // URL for a placeholder avatar or a generic icon if specific logos can't be found
-  verified: boolean; // Indicates if their presence is well-established and verifiable
+  avatar: string;
+  verified: boolean;
+}
+
+// Service recommendation interface matching BrandRecommendations
+interface ServiceRecommendation {
+  title: string;
+  description: string;
+  service: string;
+  planName: string;
+  price?: string;
+  icon?: string;
+  priority: number;
+  relevantBenchmarks: string[];
+}
+
+// Updated benchmark interfaces to match BrandResultsDisplay
+interface BenchmarkItem {
+  text: string;
+  present: boolean;
+  impact?: string;
+}
+
+interface Benchmark {
+  title: string;
+  score: number;
+  items: BenchmarkItem[];
+  moneyLeak: string;
+  isPaid?: boolean;
 }
 
 interface AnalysisResult {
   score: number;
   medal: string;
-  authenticityBenchmarks: {
-    title: string;
-    score: number;
-    items: { text: string; present: boolean }[];
-  }[];
-  techBenchmarks: {
-    title: string;
-    score: number;
-    items: { text: string; present: boolean }[];
-  }[];
-  recommendations: string[];
   summary: string;
-  competitors: Competitor[]; // Added competitors array
+  freeMetrics: Benchmark[];
+  paidMetrics: Benchmark[];
+  competitors: Competitor[];
+  recommendations: ServiceRecommendation[];
 }
 
 export default function BrandDoctorPage() {
@@ -117,150 +136,274 @@ export default function BrandDoctorPage() {
     fetchLocation();
   }, []);
 
+  // Function to transform AI benchmarks to the new format
+  const transformBenchmarks = (
+    benchmarks: any[],
+    isPaid: boolean = false
+  ): Benchmark[] => {
+    const moneyLeakMessages = {
+      "Legal Compliance":
+        "Lack of legal compliance creates customer trust issues, reducing conversion rates by up to 40%",
+      "Digital Presence":
+        "Poor digital presence means customers can't find or verify your business, losing 60% of potential leads",
+      "Reputation Management":
+        "Negative or missing reviews cause 80% of customers to choose competitors instead",
+      "Technical Maturity":
+        "Slow, insecure, or broken website loses 50% of visitors before they convert",
+      "Brand Consistency":
+        "Inconsistent branding confuses customers and reduces brand recall by 70%",
+      "Risk Assessment":
+        "Security and trust issues cause customers to abandon purchases at checkout",
+      "Search Visibility Score":
+        "You're invisible to customers actively searching for what you offer",
+      "Website Conversion Readiness":
+        "Lots of visits, but no signups/sales because CTAs aren't effective",
+      "Trust & Credibility Signals":
+        "Lack of trust = lost customers at the final decision stage",
+      "Content Authority Index":
+        "Customers see competitors as more knowledgeable, so they win deals",
+      "Social Proof & Mentions":
+        "No buzz = no virality = high customer acquisition cost",
+      "Competitor Advantage Analysis":
+        "Competitors win more traffic, attention, and conversions",
+      "Marketing Funnel Strength":
+        "You're losing leads at every stage due to broken or missing funnel",
+      "Engagement-to-Conversion Ratio":
+        "You're posting, but it's not selling or converting",
+      "Perceived Brand Authority":
+        "Low perceived status = less pricing power and premium positioning",
+    };
+
+    return benchmarks.map((benchmark) => ({
+      title: benchmark.title,
+      score: benchmark.score,
+      moneyLeak:
+        moneyLeakMessages[benchmark.title] ||
+        "This issue is causing potential revenue loss",
+      isPaid,
+      items: benchmark.items.map((item: any) => ({
+        text: item.text,
+        present: item.present,
+        impact: item.present
+          ? "Contributing to brand health"
+          : "Potential revenue opportunity",
+      })),
+    }));
+  };
+
   const analyzeBrandWithAI = async (
     brandName: string,
     industry: string
   ): Promise<AnalysisResult> => {
-
-    //https://script.google.com/macros/s/AKfycbx_AGHrdQMXCyVikDBXAT2059YSAq2idPQ5Em2jBhF_WWMErHgQJzIvDqeI2xgplprm/exec
-
+    // Log to Google Apps Script
     const url =
       "https://script.google.com/macros/s/AKfycbyzC8e9cFqIRRGs5sjD069dC-DJ6J4l5KCylBAmig4j56xXnEWH0kIOlhD2ikBwHpcC/exec";
 
-      fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `country_name=${userLocation?.country_name}&city=${userLocation?.city}&brandName=${brandName}&industry=${industry}`,
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: `country_name=${userLocation?.country_name}&city=${userLocation?.city}&brandName=${brandName}&industry=${industry}`,
+    })
+      .then((res) => res.text())
+      .then((data) => {
+        console.log(data);
       })
-        .then((res) => res.text())
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => console.log(error));
+      .catch((error) => console.log(error));
+
     // Use detected country or fallback to Nigeria
     const country = userLocation?.country_name || "Nigeria";
     const countryCode = userLocation?.country_code || "NG";
 
-    // ---
-    // Modified AI Prompt: Request competitor data with stronger search instructions and dynamic country
-    // ---
+    // Updated prompt for analyzeBrandWithAI function
     const prompt = `
-    Perform a comprehensive digital brand health analysis for the brand "${brandName}" in the "${industry}" industry, focusing on their presence in ${country}.
-    **Crucially, use the available web search tool to find and verify public online information** to assess the brand's business authenticity and technical maturity.
+Perform a comprehensive revenue leak analysis for the brand "${brandName}" in the "${industry}" industry, focusing on their presence in ${country}.
+**Use the available web search tool to find and verify public online information** to assess potential revenue losses.
 
-    Evaluate the brand across these specific categories, *verifying information through web search queries where possible*:
+Analyze the brand across FREE METRICS (basic revenue leaks):
 
-    BUSINESS AUTHENTICITY BENCHMARKS:
-    1. Legal Compliance - Search for business registration (e.g., ${countryCode === "NG" ? "CAC in Nigeria" : `business registration in ${country}`}), tax compliance indicators, and corporate structure.
-    2. Digital Presence - Search for and assess website quality, domain ownership details, professional email setup, and active social media presence.
-    3. Reputation Management - Search for online reviews, news of legal disputes or scandals, and evidence of verifiable partnerships.
+FREE METRICS:
+1. Search Visibility Score - How findable are they when customers search?
+2. Website Conversion Readiness - Are visitors converting to leads/sales?
+3. Digital Presence Score - Do they look professional and trustworthy online?
+4. Trust & Credibility Signals - Do customers trust them enough to buy?
+5. Content Authority Index - Are they seen as industry experts?
+6. Social Proof & Mentions - Do they have buzz and recommendations?
 
-    TECH & GROWTH BENCHMARKS:
-    1. Technical Maturity - Search for and evaluate website responsiveness, security (HTTPS status), and indications of modern tools usage (e.g., presence of recognizable payment gateways, CRM features).
-    2. Brand Consistency - Search for and observe uniform branding across detected online platforms, signs of professional content marketing (blogs, high-quality product descriptions), and active community engagement.
-    3. Risk Assessment - Attempt to detect brand impersonation or phishing attempts, verify physical addresses if publicly available, and assess the authenticity of claims made by the brand.
+PAID METRICS (premium insights):
+1. Competitor Advantage Analysis - How do top 3 competitors outperform them?
+2. Marketing Funnel Strength Assessment - Where are leads being lost?
+3. Engagement-to-Conversion Ratio - Is their content driving sales?
+4. Perceived Brand Authority Score - How much premium pricing power do they have?
 
-    For each benchmark category, provide:
-    - A score out of 100 based on the presence, quality, and verifiability of information found through web search.
-    - 3 specific evaluation items with true/false status based on your findings.
-    - Focus on verifiable digital presence, technical setup, and business credibility.
+**Additionally, identify the 3 strongest competitors in the "${industry}" industry in ${country}** with their details.
 
-    If specific information for an item is not publicly available or cannot be verified through web search, mark that item as 'false' and adjust the score accordingly. Explicitly state in the summary or recommendations when information is lacking due to limited public presence.
+**IMPORTANT: Generate 2-3 specific service recommendations** based on the analysis findings. Each recommendation should address the biggest revenue leaks identified.
 
-    **Additionally, identify and provide details for the 3 strongest/most prominent actual companies that are direct competitors in the "${industry}" industry in ${country}, leveraging public web search information.** When searching for competitors, prioritize companies with a strong, verifiable online presence. For each competitor, use specific search queries to find:
-    - Their 'name' (e.g., search for "top ${industry} companies in ${country}", "${industry} market leaders ${country}")
-    - A 'score' (estimate their market/digital presence strength out of 100 based on search results like search volume, social media following, general prominence)
-    - Their 'industry' (which should be "${industry}")
-    - A 'rating' (search for "[competitor name] reviews", "best ${industry} companies reviews" and infer an average user review rating, e.g., 4.5. If exact data is not found, make a reasonable inference based on general sentiment found in search results, or use a default like 4.0 if no sentiment is clear.)
-    - 'reviews' (search for "[competitor name] reviews count", "number of [competitor name] user reviews" and infer a count. If exact data isn't found, estimate based on mentions of reviews, or use a default like 100 if none are clear.)
-    - A brief 'description' (based on their official website or prominent online descriptions)
-    - An array of 'strengths' (3-4 key digital or business strengths derived from their online presence and what they are known for, e.g., "Extensive product range", "Strong customer support", "Innovative platform")
-    - An 'avatar' URL (attempt to find a direct URL to their logo or a representative image.)
-    - A 'verified' boolean (true if they have a strong, verifiable online presence and easily discoverable information via search.)
+For each FREE metric, provide:
+- A score out of 100
+- 3-4 specific evaluation items with true/false status
+- Focus on revenue impact potential
 
-    If specific, verifiable data for any competitor field (e.g., exact rating, exact review count) is not easily found through a quick search, provide a reasonable estimate or a placeholder value (e.g., 4.0 for rating, 100 for reviews) and mention that it's an inference. Avoid using "Placeholder" in the actual competitor names or descriptions.
+For each PAID metric, provide:
+- A score out of 100  
+- 3-4 specific evaluation items with true/false status
+- Focus on competitive disadvantages and missed opportunities
 
-    Format your entire response as a JSON object with these exact keys:
+For competitors, find:
+- name, score (0-100), industry, rating (1-5), reviews count, description, strengths array, avatar URL, verified boolean
+
+For service recommendations, provide:
+- title: Clear service name
+- description: Brief explanation of how it helps
+- service: Specific deliverables included
+- planName: Branded package name with emoji
+- priority: 1-3 (1 = highest priority)
+- relevantBenchmarks: Array of benchmark titles this service addresses
+
+Format response as JSON:
+{
+  "score": number (0-100, average of all metrics),
+  "summary": "Brief summary of revenue leak findings for ${country}'s market",
+  "freeMetrics": [
     {
-      "score": number (0-100) should be the average of all the Benchmarks score parameters,
-      "summary": "Brief 2-3 sentence summary of overall brand health in the context of ${country}'s market",
-      "authenticityBenchmarks": [
-        {
-          "title": "Legal Compliance",
-          "score": number (0-100) should be the average of all the text items score parameters,
-          "items": [
-            {"text": "Business registration found (${countryCode === "NG" ? "e.g., CAC in Nigeria" : `in ${country}`})", "present": boolean},
-            {"text": "Indications of tax compliance (e.g., TIN on website, public records)", "present": boolean},
-            {"text": "Clear corporate structure/company type publicly stated", "present": boolean}
-          ]
-        },
-        {
-          "title": "Digital Presence",
-          "score": number (0-100) should be the average of all the text items score parameters,
-          "items": [
-            {"text": "Professional website (.com/${countryCode.toLowerCase()}) found and accessible", "present": boolean},
-            {"text": "Business domain email (e.g., info@brand.com) used publicly", "present": boolean},
-            {"text": "Active and professional social media profiles (Facebook, Instagram, etc.)", "present": boolean}
-          ]
-        },
-        {
-          "title": "Reputation Management",
-          "score": number (0-100) should be the average of all the text items score parameters,
-          "items": [
-            {"text": "Predominantly positive online reviews/mentions found", "present": boolean},
-            {"text": "No public record of significant legal disputes/scandals found", "present": boolean},
-            {"text": "Evidence of verifiable and reputable partnerships/collaborations", "present": boolean}
-          ]
-        }
-      ],
-      "techBenchmarks": [
-        {
-          "title": "Technical Maturity",
-          "score": number (0-100) should be the average of all the text items score parameters,
-          "items": [
-            {"text": "Mobile-responsive website", "present": boolean},
-            {"text": "HTTPS secured", "present": boolean},
-            {"text": "Modern tech tools (CRM, payments)", "present": boolean}
-          ]
-        },
-        {
-          "title": "Brand Consistency",
-          "score": number (0-100) should be the average of all the text items score parameters,
-          "items": [
-            {"text": "Uniform branding across platforms", "present": boolean},
-            {"text": "Professional content marketing", "present": boolean},
-            {"text": "Active in tech communities", "present": boolean}
-          ]
-        },
-        {
-          "title": "Risk Assessment",
-          "score": number (0-100) should be the average of all the text items score parameters,
-          "items": [
-            {"text": "No impersonation detected", "present": boolean},
-            {"text": "Physical address verified", "present": boolean},
-            {"text": "No fake claims identified", "present": boolean}
-          ]
-        }
-      ],
-      "recommendations": ["recommendation1", "recommendation2", "recommendation3", "recommendation4"],
-      "competitors": [
-        {
-          "name": "Competitor Name 1",
-          "score": number (0-100),
-          "industry": "${industry}",
-          "rating": number (e.g., 4.5),
-          "reviews": number (e.g., 120),
-          "description": "Brief description of Competitor 1.",
-          "strengths": ["Strength 1", "Strength 2", "Strength 3"],
-          "avatar": "URL_to_avatar_image_1",
-          "verified": boolean
-        },
-        // ... (up to 3 competitors)
+      "title": "Search Visibility Score",
+      "score": number (0-100),
+      "items": [
+        {"text": "Ranking for primary industry keywords", "present": boolean},
+        {"text": "Google Business Profile optimized", "present": boolean},
+        {"text": "Local SEO signals present", "present": boolean},
+        {"text": "Mobile search visibility", "present": boolean}
+      ]
+    },
+    {
+      "title": "Website Conversion Readiness",
+      "score": number (0-100),
+      "items": [
+        {"text": "Clear value proposition above fold", "present": boolean},
+        {"text": "Strong call-to-action buttons", "present": boolean},
+        {"text": "Lead magnets or free trials", "present": boolean},
+        {"text": "Mobile-optimized conversion flow", "present": boolean}
+      ]
+    },
+    {
+      "title": "Digital Presence Score",
+      "score": number (0-100),
+      "items": [
+        {"text": "Professional website design", "present": boolean},
+        {"text": "Business email and contact info", "present": boolean},
+        {"text": "Active social media presence", "present": boolean},
+        {"text": "Consistent brand messaging", "present": boolean}
+      ]
+    },
+    {
+      "title": "Trust & Credibility Signals",
+      "score": number (0-100),
+      "items": [
+        {"text": "Customer reviews and testimonials", "present": boolean},
+        {"text": "Security badges and certifications", "present": boolean},
+        {"text": "About us page with team info", "present": boolean},
+        {"text": "Clear privacy and terms policies", "present": boolean}
+      ]
+    },
+    {
+      "title": "Content Authority Index",
+      "score": number (0-100),
+      "items": [
+        {"text": "Regular blog or educational content", "present": boolean},
+        {"text": "Industry thought leadership posts", "present": boolean},
+        {"text": "How-to guides and resources", "present": boolean},
+        {"text": "Speaking engagements or interviews", "present": boolean}
+      ]
+    },
+    {
+      "title": "Social Proof & Mentions",
+      "score": number (0-100),
+      "items": [
+        {"text": "Positive brand mentions online", "present": boolean},
+        {"text": "User-generated content", "present": boolean},
+        {"text": "Influencer or media endorsements", "present": boolean},
+        {"text": "Industry awards or recognition", "present": boolean}
       ]
     }
+  ],
+  "paidMetrics": [
+    {
+      "title": "Competitor Advantage Analysis",
+      "score": number (0-100),
+      "items": [
+        {"text": "SEO performance vs top 3 competitors", "present": boolean},
+        {"text": "Social media engagement rates comparison", "present": boolean},
+        {"text": "Content marketing effectiveness gap", "present": boolean},
+        {"text": "Technology stack competitiveness", "present": boolean}
+      ]
+    },
+    {
+      "title": "Marketing Funnel Strength Assessment",
+      "score": number (0-100),
+      "items": [
+        {"text": "Lead capture optimization", "present": boolean},
+        {"text": "Email nurture sequences active", "present": boolean},
+        {"text": "Retargeting campaigns running", "present": boolean},
+        {"text": "Sales process automation", "present": boolean}
+      ]
+    },
+    {
+      "title": "Engagement-to-Conversion Ratio",
+      "score": number (0-100),
+      "items": [
+        {"text": "Social media drives website traffic", "present": boolean},
+        {"text": "Content generates qualified leads", "present": boolean},
+        {"text": "Email campaigns drive conversions", "present": boolean},
+        {"text": "Paid ads have positive ROI", "present": boolean}
+      ]
+    },
+    {
+      "title": "Perceived Brand Authority Score",
+      "score": number (0-100),
+      "items": [
+        {"text": "Premium pricing compared to competitors", "present": boolean},
+        {"text": "Thought leadership recognition", "present": boolean},
+        {"text": "Media coverage and PR mentions", "present": boolean},
+        {"text": "Industry partnership and collaborations", "present": boolean}
+      ]
+    }
+  ],
+  "competitors": [
+    {
+      "name": "Competitor 1",
+      "score": number (0-100),
+      "industry": "${industry}",
+      "rating": number (1-5),
+      "reviews": number,
+      "description": "Brief description",
+      "strengths": ["strength1", "strength2", "strength3"],
+      "avatar": "https://via.placeholder.com/150",
+      "verified": boolean
+    }
+  ],
+  "recommendations": [
+    {
+      "title": "Website Optimization Package",
+      "description": "Fix conversion issues and improve user experience",
+      "service": "Landing page redesign, mobile optimization, speed improvements, CTA optimization",
+      "planName": "🚀 Conversion Booster",
+      "priority": 1,
+      "relevantBenchmarks": ["Website Conversion Readiness", "Digital Presence Score"]
+    },
+    {
+      "title": "SEO & Visibility Boost",
+      "description": "Increase online visibility and search rankings",
+      "service": "Keyword research, on-page SEO, Google Business Profile setup, local SEO",
+      "planName": "📈 Visibility Maximizer",
+      "priority": 2,
+      "relevantBenchmarks": ["Search Visibility Score", "Content Authority Index"]
+    }
+  ]
+}
 
-    Be realistic in your assessment. If the brand or its competitors are not well-known or have a limited digital footprint, base analysis on the lack of discoverable information and typical industry standards for digital presence in ${country}. Provide a generic placeholder avatar URL if a real one isn't readily available through search.
-    `;
+Be realistic in assessment. Focus on measurable revenue impact potential.
+Generate recommendations that directly address the lowest-scoring metrics.
+`;
 
     try {
       const model = genAI.getGenerativeModel({
@@ -287,7 +430,6 @@ export default function BrandDoctorPage() {
         ],
       });
 
-      // The model may first respond with tool calls, then you execute them
       const chat = model.startChat();
       const result = await chat.sendMessage(prompt);
       const response = result.response;
@@ -301,10 +443,6 @@ export default function BrandDoctorPage() {
         response.candidates[0].content &&
         response.candidates[0].content.parts
       ) {
-        console.log(
-          "Model might have tried to make a tool call. Raw response parts:",
-          response.candidates[0].content.parts
-        );
         const parts = response.candidates[0].content.parts;
         for (const part of parts) {
           if ("text" in part) {
@@ -313,10 +451,7 @@ export default function BrandDoctorPage() {
         }
       }
 
-      console.log(
-        "Raw AI response (with search grounding enabled):",
-        textContent
-      );
+      console.log("Raw AI response:", textContent);
 
       // Extract JSON from the response
       const jsonMatch = textContent?.match(/\{[\s\S]*\}/);
@@ -326,19 +461,27 @@ export default function BrandDoctorPage() {
         );
       }
 
-      const analysisData = JSON.parse(jsonMatch[0]);
+      const rawData = JSON.parse(jsonMatch[0]);
 
-      // Determine medal based on score
-      let medal = "";
-      if (analysisData.score >= 80) medal = "Gold";
-      else if (analysisData.score >= 65) medal = "Silver";
-      else if (analysisData.score >= 50) medal = "Bronze";
-      else medal = "Starter";
-
-      return {
-        ...analysisData,
-        medal,
+      // Transform the data to match BrandResultsDisplay expectations
+      const transformedData: AnalysisResult = {
+        score: rawData.score,
+        medal:
+          rawData.score >= 80
+            ? "Gold"
+            : rawData.score >= 65
+              ? "Silver"
+              : rawData.score >= 50
+                ? "Bronze"
+                : "Starter",
+        summary: rawData.summary,
+        freeMetrics: transformBenchmarks(rawData.freeMetrics, false),
+        paidMetrics: transformBenchmarks(rawData.paidMetrics, true),
+        competitors: rawData.competitors || [],
+        recommendations: rawData.recommendations || [],
       };
+
+      return transformedData;
     } catch (error) {
       console.error("AI Analysis Error:", error);
       throw new Error("Failed to analyze brand. Please try again.");
@@ -392,7 +535,7 @@ export default function BrandDoctorPage() {
         {/* Location indicator */}
         {userLocation && !locationLoading && (
           <div className="container mx-auto px-4 mb-2">
-            <div className="text-sm  text-center">
+            <div className="text-sm text-center">
               📍 Analyzing for {userLocation.city}, {userLocation.country_name}
             </div>
           </div>
@@ -426,19 +569,20 @@ export default function BrandDoctorPage() {
                 industry={industry}
                 score={analysisResult.score}
                 medal={analysisResult.medal}
-                authenticityBenchmarks={analysisResult.authenticityBenchmarks}
-                techBenchmarks={analysisResult.techBenchmarks}
+                freeMetrics={analysisResult.freeMetrics}
+                paidMetrics={analysisResult.paidMetrics}
                 summary={analysisResult.summary}
+                isPremiumUser={false} // Set to true for premium users
               />
               <BrandRecommendations
                 brandName={brandName}
                 industry={industry}
                 score={analysisResult.score}
-                competitors={analysisResult.competitors} // Pass competitors here
+                competitors={analysisResult.competitors}
+                recommendations={analysisResult.recommendations} // Now properly passed
                 onReset={resetAnalysis}
-                //
-                authenticityBenchmarks={analysisResult.authenticityBenchmarks}
-                techBenchmarks={analysisResult.techBenchmarks}
+                authenticityBenchmarks={[]} // Legacy prop - can be removed if not needed
+                techBenchmarks={[]} // Legacy prop - can be removed if not needed
               />
             </div>
           )
