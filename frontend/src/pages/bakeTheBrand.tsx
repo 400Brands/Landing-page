@@ -6,9 +6,10 @@ import DefaultMain from "@/layouts/defaultMain";
 import BrandAnalysisForm from "./brandDoctor/brandForm";
 import BrandResultsDisplay from "./brandDoctor/brandResult";
 import BrandRecommendations from "./brandDoctor/brandRecommendation";
+import { useAuth } from "@/context/AuthContext";
 
 // Initialize Gemini AI
-const GEMINI_API_KEY = "AIzaSyCkfZ0QXrsstOS0dNrpGIslNU_6b_I-uWg"; // Replace with your actual key
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY; // Replace with your actual key
 // IMPORTANT: For production, do NOT expose your API key directly in client-side code.
 // Consider using environment variables (process.env.NEXT_PUBLIC_GEMINI_API_KEY)
 // or a backend proxy to make API calls securely.
@@ -111,6 +112,8 @@ export default function BrandDoctorPage() {
       };
     }
   };
+
+  const { user  } = useAuth();
 
   // Get user location on component mount
   useEffect(() => {
@@ -536,7 +539,8 @@ Generate recommendations that directly address the lowest-scoring metrics.
         {userLocation && !locationLoading && (
           <div className="container mx-auto px-4 mb-2">
             <div className="text-sm text-center">
-              📍 Analyzing for {userLocation.city}, {userLocation.country_name}
+              📍 Analyzing for {userLocation.city}, {userLocation.country_name}{" "}
+              For {user?.email}
             </div>
           </div>
         )}
@@ -572,7 +576,7 @@ Generate recommendations that directly address the lowest-scoring metrics.
                 freeMetrics={analysisResult.freeMetrics}
                 paidMetrics={analysisResult.paidMetrics}
                 summary={analysisResult.summary}
-                isPremiumUser={false} // Set to true for premium users
+                isPremiumUser={user ? true : false} // Set to true for premium users
               />
               <BrandRecommendations
                 brandName={brandName}

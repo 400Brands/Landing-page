@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { HeartPulse, CheckIcon } from "lucide-react";
 import { useLocation } from "react-router-dom"; // Assuming react-router-dom is used for useLocation
 
@@ -69,26 +68,20 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
   // Show loading overlay if auto-analyzing and currently analyzing
   if (autoAnalyzing && isAnalyzing) {
     return (
-      <motion.div
+      <div
         className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-50 flex items-center justify-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
+        
       >
-        <motion.div
+        <div
           className="bg-gray-800 p-8 rounded-xl max-w-md w-full mx-4 border border-gray-700"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
+         
         >
           <div className="flex flex-col items-center text-center space-y-4">
             <div className="relative">
               <HeartPulse className="w-12 h-12 text-blue-400 animate-pulse" />
-              <motion.div
+              <div
                 className="absolute inset-0 rounded-full border-4 border-blue-400 border-t-transparent"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+               
               />
             </div>
             <h3 className="text-xl font-bold text-white">
@@ -109,43 +102,35 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
               across the web
             </p>
             <div className="w-full bg-gray-700 rounded-full h-2.5 mt-4">
-              <motion.div
+              <div
                 className="bg-gradient-to-r from-blue-500 to-purple-600 h-2.5 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 2, repeat: Infinity }}
+              
               />
             </div>
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     );
   }
 
   return (
-    <motion.div
+    <div
       className="container min-h-screen mx-auto px-4 flex items-center justify-center py-12" // Added flex for centering
-      initial="hidden"
-      animate="visible"
-      variants={fadeIn}
+    
     >
       {/* Form Section */}
-      <motion.div className="max-w-3xl mx-auto w-full" variants={scaleUp}>
-        <motion.div
+      <div className="max-w-3xl mx-auto w-full">
+        <div
           className="bg-gradient-to-br from-slate-900 to-gray-950 p-8 rounded-xl border border-gray-700 shadow-xl"
-          whileHover={{
-            boxShadow:
-              "0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04)",
-          }}
+          
         >
           <div className="flex items-center mb-6">
-            <motion.div
+            <div
               className="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center mr-4"
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 1 }}
+             
             >
               <HeartPulse className="w-6 h-6 text-blue-300" />
-            </motion.div>
+            </div>
             <div>
               <h2 className="text-2xl font-bold text-white">Brands Doctor</h2>
               <p className="text-gray-400">
@@ -162,14 +147,14 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
               >
                 Your Brand/Business Name
               </label>
-              <motion.input
+              <input
                 type="text"
                 id="brand-name"
                 value={brandName}
                 onChange={(e) => setBrandName(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 placeholder="e.g. My Business Name"
-                whileFocus={{ scale: 1.01, borderColor: "#3b82f6" }}
+                
               />
             </div>
 
@@ -182,20 +167,20 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
               </label>
               {/* You can use a select dropdown for industry for better control over valid inputs,
                   or keep it a text input if the industry can be anything. */}
-              <motion.input
+              <input
                 type="text" // Changed to text for flexibility, but a select is often better for industries
                 id="industry"
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 placeholder="e.g. E-commerce, Fintech, Healthcare, SaaS"
-                whileFocus={{ scale: 1.01, borderColor: "#3b82f6" }}
+               
               />
             </div>
 
-            <motion.div
+            <div
               className="bg-gray-800 rounded-xl p-6 border-l-4 border-blue-500"
-              whileHover={{ x: 5 }}
+             
             >
               <h3 className="font-bold text-white mb-2">What We Analyze:</h3>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-300">
@@ -207,19 +192,19 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
                   "Social media presence & engagement",
                   "Brand consistency across platforms",
                 ].map((item, idx) => (
-                  <motion.li
+                  <li
                     key={idx}
                     className="flex items-center"
-                    whileHover={{ x: 3 }}
+                   
                   >
                     <CheckIcon className="w-5 h-5 text-blue-400 mr-2 flex-shrink-0" />
                     <span>{item}</span>
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
 
-            <motion.button
+            <button
               onClick={handleSubmit}
               disabled={isAnalyzing || !brandName.trim() || !industry.trim()} // Added .trim() for industry
               className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 ${
@@ -227,17 +212,7 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
                   ? "bg-gray-600 cursor-not-allowed"
                   : "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg"
               }`}
-              whileHover={
-                brandName.trim() && industry.trim()
-                  ? {
-                      scale: 1.02,
-                      boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.3)",
-                    }
-                  : {}
-              }
-              whileTap={
-                brandName.trim() && industry.trim() ? { scale: 0.98 } : {}
-              }
+             
             >
               {isAnalyzing ? (
                 <span className="flex items-center justify-center">
@@ -266,26 +241,19 @@ const BrandAnalysisForm: React.FC<BrandAnalysisFormProps> = ({
               ) : (
                 "Check My Brand Health Now"
               )}
-            </motion.button>
+            </button>
 
-            <motion.p
+            <p
               className="text-center text-gray-400 text-sm"
-              animate={{
-                opacity: [0.5, 1, 0.5],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatType: "reverse",
-              }}
+               
             >
               Takes less than 60 seconds • No credit card required • Instant
               results
-            </motion.p>
+            </p>
           </div>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+        </div>
+      </div>
+    </div>
   );
 };
 

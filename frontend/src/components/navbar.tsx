@@ -1,6 +1,3 @@
-// @ts-nocheck
-
-import { Button } from "@heroui/button";
 import { Kbd } from "@heroui/kbd";
 import { Link } from "@heroui/link";
 import { Input } from "@heroui/input";
@@ -18,9 +15,9 @@ import clsx from "clsx";
 import { useLocation } from "react-router-dom";
 
 import { siteConfig } from "@/config/site";
-import { GithubIcon, SearchIcon } from "@/components/icons";
-import { PhoneCallIcon } from "lucide-react";
+import { SearchIcon } from "@/components/icons";
 import { ThemeSwitch } from "./theme-switch";
+import GetStarted from "./modal";
 
 export const Navbar = () => {
   const location = useLocation();
@@ -103,18 +100,9 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <ThemeSwitch/>
+        <ThemeSwitch />
         <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-md font-bold text-default-600 bg-default-100 hover:bg-default-200 transition-colors"
-            
-            href="https://wa.me/2347083519662"
-            variant="flat"
-          >
-            Contact Us
-          </Button>
+          <GetStarted size="md"/>
         </NavbarItem>
       </NavbarContent>
 
@@ -136,11 +124,11 @@ export const Navbar = () => {
                     isActive
                       ? "primary"
                       : index === siteConfig.navMenuItems.length - 1
-                      ? "danger"
-                      : "foreground"
+                        ? "danger"
+                        : "foreground"
                   }
                   href={item.href}
-                  size="lg"
+                  
                 >
                   {item.label}
                 </Link>

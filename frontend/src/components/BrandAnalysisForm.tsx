@@ -62,9 +62,6 @@ const BrandAnalysisForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("Submitting form with brandName:", brandName);
-    console.log("Submitting form with industry (state key):", industry);
-
     // Reset error
     setError(null);
 

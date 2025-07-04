@@ -12,6 +12,7 @@ import "aos/dist/aos.css";
 
 import { useEffect } from "react";
 import BrandDoctorPage from "./pages/bakeTheBrand";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
 
@@ -26,7 +27,8 @@ function App() {
 
   return (
     <main className="dark ">
-      <Routes>
+          <AuthProvider>
+            <Routes>
         <Route element={<IndexPage />} path="/" />
         <Route element={<DocsPage />} path="/what_we_do" />
         <Route element={<PricingPage />} path="/what_we_think" />
@@ -34,6 +36,8 @@ function App() {
         <Route element={<AboutPage />} path="/careers" />
         <Route element={<BrandDoctorPage />} path="/bake" />
       </Routes>
+          </AuthProvider>
+      
     </main>
   );
 }
