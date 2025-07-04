@@ -2,21 +2,6 @@ import { useState, useEffect } from "react";
 import { HeartPulse, CheckIcon } from "lucide-react";
 import { useLocation } from "react-router-dom"; // Assuming react-router-dom is used for useLocation
 
-// Animation variants
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.8 } },
-};
-
-const scaleUp = {
-  hidden: { scale: 0.9, opacity: 0 },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: { duration: 0.5, ease: "backOut" },
-  },
-};
-
 interface BrandAnalysisFormProps {
   onAnalysis: (brandName: string, industry: string) => void;
   isAnalyzing: boolean;
