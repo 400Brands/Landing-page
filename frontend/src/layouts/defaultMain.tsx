@@ -99,7 +99,7 @@ export default function DefaultMain({ children }: DefaultMainProps) {
       {/* Content & Footer Here */}
       <div className="relative z-10 flex flex-col min-h-screen">
         <Navbar />
-        <main className="container mx-auto max-w-7xl px-3 space-y-6 md:px-6 flex-grow pt-12 md:pt-16">
+        <main className="container mx-auto max-w-7xl px-3 space-y-6 md:px-6 flex-grow">
           {children}
         </main>
 
