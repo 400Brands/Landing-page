@@ -3,10 +3,7 @@ import {
   ArrowBigLeft,
   ArrowBigRight,
   Check,
-  Flame,
   Headset,
-  Heart,
-  Phone,
   Star,
 } from "lucide-react";
 import { ReactNode, useState } from "react";
