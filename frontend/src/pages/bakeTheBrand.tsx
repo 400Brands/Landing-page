@@ -373,7 +373,7 @@ Format response as JSON:
   ],
   "competitors": [
     {
-      "name": "Competitor 1",
+      "name": "Competitor Name 1",
       "score": number (0-100),
       "industry": "${industry}",
       "rating": number (1-5),
