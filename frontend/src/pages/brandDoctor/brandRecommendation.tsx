@@ -67,13 +67,13 @@ const BrandRecommendations = ({
 
   // Pricing benchmarks for approximation
   const pricingBenchmarks = {
-    starter: { naira: 150000, usd: 99 },
-    consultation: { naira: 200000, usd: 129 },
-    digital: { naira: 250000, usd: 159 },
-    growth: { naira: 450000, usd: 299 },
-    marketing: { naira: 600000, usd: 399 },
-    premium: { naira: 950000, usd: 599 },
-    enterprise: { naira: 1500000, usd: 999 },
+    starter: {  usd: 99 },
+    consultation: {  usd: 129 },
+    digital: {  usd: 159 },
+    growth: { usd: 299 },
+    marketing: {  usd: 399 },
+    premium: {  usd: 599 },
+    enterprise: {  usd: 999 },
   };
 
   // Icon mapping for different service types
