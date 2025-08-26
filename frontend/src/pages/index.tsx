@@ -1,7 +1,5 @@
 import DefaultMain from "@/layouts/defaultMain";
 import {
-  ArrowBigLeft,
-  ArrowBigRight,
   Check,
   Headset,
   Star,
@@ -11,20 +9,11 @@ import { useRef } from "react";
 import { Link } from "@heroui/link";
 import { TypeAnimation } from "react-type-animation";
 import WaitlistForm from "@/components/WaitlistForm";
-import { works } from "@/constant";
+
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function IndexPage() {
-  const [currentWork, setCurrentWork] = useState(0);
   const ref = useRef(null);
-
-  const nextWork = () => {
-    setCurrentWork((prev) => (prev + 1) % works.length);
-  };
-
-  const prevWork = () => {
-    setCurrentWork((prev) => (prev - 1 + works.length) % works.length);
-  };
 
   interface HashLinkProps {
     href: string;

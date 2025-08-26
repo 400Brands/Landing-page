@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Mail, Phone } from "lucide-react";
 import { Link } from "@heroui/link";
-import { useNavigate } from "react-router-dom";
+
 
 interface DefaultMainProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ interface DefaultMainProps {
 export default function DefaultMain({ children }: DefaultMainProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [showFirstVideo, setShowFirstVideo] = useState(true);
-  const navigate = useNavigate(); // Moved inside the component
+
 
   useEffect(() => {
     const checkScreenSize = () => {
