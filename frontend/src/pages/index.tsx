@@ -4,7 +4,7 @@ import {
   Headset,
   Star,
 } from "lucide-react";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import { useRef } from "react";
 import { Link } from "@heroui/link";
 import { TypeAnimation } from "react-type-animation";
