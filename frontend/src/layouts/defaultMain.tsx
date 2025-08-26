@@ -108,20 +108,15 @@ export default function DefaultMain({ children }: DefaultMainProps) {
           <div className="p-12 bg-gradient-to-r from-blue-900 to-purple-900 text-white">
             <div className="text-center max-w-3xl mx-auto">
               <h2 className="text-3xl font-bold mb-4">
-                Ready to Start Your Digital Journey?
+                Ready to Start Your Digital Content Journey?
               </h2>
               <p className="mb-8 text-lg">
                 Book your <b>free consultation</b> or pick a plan that fits your
-                business!
+                business and style!
               </p>
 
               <div className="flex flex-wrap justify-center gap-4">
-                <button
-                  onClick={() => navigate("/bake")}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-6 py-3 rounded-lg flex items-center"
-                >
-                  <span>Start Now</span>
-                </button>
+                
                 <button
                   onClick={handleWhatsApp}
                   className="bg-white text-green-600 hover:bg-gray-100 font-medium px-6 py-3 rounded-lg flex space-x-3 items-center"

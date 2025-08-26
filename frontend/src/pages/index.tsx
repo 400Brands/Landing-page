@@ -91,7 +91,7 @@ export default function IndexPage() {
             <div className="flex items-start justify-center lg:justify-end">
               <div className="relative">
                 <DotLottieReact
-                  src="https://lottie.host/f435da50-b436-410e-99a6-08ffbb25329a/OG58OcEfUo.lottie"
+                  src="https://lottie.host/c9d99835-7150-422b-a928-2c9171b144da/VEJ9kxpKQg.lottie"
                   loop
                   autoplay
                   className="w-80 h-80 lg:w-96 lg:h-96 xl:w-[500px] xl:h-[500px]"
