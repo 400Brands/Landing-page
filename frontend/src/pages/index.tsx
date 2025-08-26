@@ -1,16 +1,30 @@
 import DefaultMain from "@/layouts/defaultMain";
 import {
+  ArrowBigLeft,
+  ArrowBigRight,
   Check,
   Headset,
   Star,
 } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
+import { useRef } from "react";
 import { Link } from "@heroui/link";
 import { TypeAnimation } from "react-type-animation";
 import WaitlistForm from "@/components/WaitlistForm";
+import { works } from "@/constant";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function IndexPage() {
+  const [currentWork, setCurrentWork] = useState(0);
+  const ref = useRef(null);
+
+  const nextWork = () => {
+    setCurrentWork((prev) => (prev + 1) % works.length);
+  };
+
+  const prevWork = () => {
+    setCurrentWork((prev) => (prev - 1 + works.length) % works.length);
+  };
 
   interface HashLinkProps {
     href: string;
@@ -91,7 +105,7 @@ export default function IndexPage() {
             <div className="flex items-start justify-center lg:justify-end">
               <div className="relative">
                 <DotLottieReact
-                  src="https://lottie.host/c9d99835-7150-422b-a928-2c9171b144da/VEJ9kxpKQg.lottie"
+                  src="https://lottie.host/f435da50-b436-410e-99a6-08ffbb25329a/OG58OcEfUo.lottie"
                   loop
                   autoplay
                   className="w-80 h-80 lg:w-96 lg:h-96 xl:w-[500px] xl:h-[500px]"
@@ -180,6 +194,7 @@ export default function IndexPage() {
         data-aos-duration="1000"
         data-aos-once="false"
         className="relative flex flex-col gap-6"
+        ref={ref}
       >
         <div className="py-10 md:py-10 relative z-0">
           <div className="text-center mb-12 md:mb-16">
@@ -257,9 +272,9 @@ export default function IndexPage() {
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                       ))}
-                    </div>
-                  </div>
-                </div>
+            </div>
+          </div>
+        </div>
 
                 {/* Review Text */}
                 <p className="text-gray-300 text-sm mb-4 italic">
@@ -271,23 +286,23 @@ export default function IndexPage() {
                   <span className="text-purple-400 font-medium">{testimonial.product}</span>
                   <span className="text-gray-500 bg-gray-800 px-2 py-1 rounded-full">
                     {testimonial.category}
-                  </span>
-                </div>
+                </span>
               </div>
+            </div>
             ))}
 
             <div className="bg-gradient-to-br from-purple-600 to-pink-700 p-6 rounded-xl text-white hover:shadow-lg hover:shadow-pink-500/30 transition-all duration-300 hover:translate-y-[-5px] border border-pink-500/30">
               <div className="text-center">
                 <div className="text-4xl mb-4">
                   <Star className="w-12 h-12 mx-auto fill-yellow-400 text-yellow-400" />
-                </div>
+                  </div>
                 <h3 className="text-xl font-bold mb-2">Join Alpha Testing</h3>
                 <p className="text-sm mb-4">
                   Be part of the exclusive group of beauty creators testing ScrollMine alpha and transforming their social media game
                 </p>
                 <div className="text-2xl font-bold text-yellow-400">4.9/5</div>
                 <p className="text-xs text-gray-300">Average Rating</p>
-              </div>
+                </div>
             </div>
           </div>
         </div>
