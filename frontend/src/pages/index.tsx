@@ -1,30 +1,16 @@
 import DefaultMain from "@/layouts/defaultMain";
 import {
-  ArrowBigLeft,
-  ArrowBigRight,
   Check,
   Headset,
   Star,
 } from "lucide-react";
-import { ReactNode, useState } from "react";
-import { useRef } from "react";
+import { ReactNode } from "react";
 import { Link } from "@heroui/link";
 import { TypeAnimation } from "react-type-animation";
 import WaitlistForm from "@/components/WaitlistForm";
-import { works } from "@/constant";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function IndexPage() {
-  const [currentWork, setCurrentWork] = useState(0);
-  const ref = useRef(null);
-
-  const nextWork = () => {
-    setCurrentWork((prev) => (prev + 1) % works.length);
-  };
-
-  const prevWork = () => {
-    setCurrentWork((prev) => (prev - 1 + works.length) % works.length);
-  };
 
   interface HashLinkProps {
     href: string;
@@ -194,7 +180,6 @@ export default function IndexPage() {
         data-aos-duration="1000"
         data-aos-once="false"
         className="relative flex flex-col gap-6"
-        ref={ref}
       >
         <div className="py-10 md:py-10 relative z-0">
           <div className="text-center mb-12 md:mb-16">
