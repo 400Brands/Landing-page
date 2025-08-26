@@ -10,7 +10,7 @@ import { ReactNode, useState } from "react";
 import { useRef } from "react";
 import { Link } from "@heroui/link";
 import { TypeAnimation } from "react-type-animation";
-import BrandAnalysisForm from "@/components/BrandAnalysisForm";
+import WaitlistForm from "@/components/WaitlistForm";
 import { works } from "@/constant";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
@@ -59,14 +59,12 @@ export default function IndexPage() {
               <div className="space-y-6">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
                   <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                    Diagnose Your Brand.
+                  Ready-to-post social content.
                   </span>
                 </h1>
 
                 <p className="text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-2xl">
-                  BrandDoctor gives you a Health score + action plan to
-                  instantly improve your online brand visibility, trust, and
-                  traction.
+                ScrollMine turns your everyday browsing into ready-to-post social content. Currently in alpha testing.
                 </p>
               </div>
 
@@ -75,7 +73,7 @@ export default function IndexPage() {
                 <HashLink href="#brandDoctor">
                   <button className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25">
                     <span className="flex items-center justify-center">
-                      Brand Doctor
+                     Join Alpha Test
                       <svg
                         className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
                         fill="none"
@@ -124,15 +122,17 @@ export default function IndexPage() {
           <p className="font-sans">
             <TypeAnimation
               sequence={[
-                "Brand Health Checkup",
+                "Capture with a Click",
                 2000,
-                "Digital Diagnosis",
+                "Organize Your Ideas",
                 2000,
-                "Growth Prescription",
+                "Create Polished Posts",
                 2000,
-                "Brand Recovery",
+                "Ready-to-post social content",
                 2000,
-                "Marketing Medicine",
+                "Post to Social Media",
+                2000,
+                "Alpha Testing Now",
                 2000,
               ]}
               speed={30}
@@ -144,14 +144,14 @@ export default function IndexPage() {
               wrapper="span"
               repeat={Infinity}
             />{" "}
-            — We provide <b>comprehensive brand diagnosis and treatment</b>{" "}
-            <br /> to turn your ideas into world-class product
-            <br /> just starting or scaling
+            — 💡  <b>ScrollMine</b>{" "}
+            <br /> turns your everyday browsing
+            <br /> into ready-to-post social content
           </p>
         </div>
       </section>
 
-      {/* Brand Doctor aesthetic 1 input form that Routes to /D with the input value */}
+      {/* Waitlist Section */}
       <section
         id="brandDoctor"
         className="py-16 md:py-24 bg-gradient-to-b from-gray-900 to-gray-950"
@@ -159,11 +159,10 @@ export default function IndexPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-              Brand Doctor Diagnosis
+              Join Alpha Testing
             </h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-              Get a free instant analysis of your brand's digital health and
-              discover growth opportunities in under 30 seconds.
+              ScrollMine is currently in alpha stage! Enter your email to get invited to test it out and be among the first to experience our revolutionary social content creation platform.
             </p>
           </div>
 
@@ -173,20 +172,21 @@ export default function IndexPage() {
                 <Star className="w-5 h-5 text-blue-400" />
               </div>
               <h3 className="text-xl font-semibold text-white">
-                What's your brand's name?
+                Get Alpha Access
               </h3>
             </div>
 
-            <BrandAnalysisForm />
+            <WaitlistForm />
 
             <div className="mt-6 flex items-center gap-2 text-sm text-gray-400">
               <Check className="w-4 h-4 text-green-400" />
-              <span>Privacy-first analysis. We never store your data.</span>
+              <span>We'll send you an invite to test the alpha version. No spam, just early access.</span>
             </div>
           </div>
         </div>
       </section>
 
+{/* Testimonials Section */}
       <section
         data-aos="zoom-in-up"
         data-aos-offset="200"
@@ -199,258 +199,116 @@ export default function IndexPage() {
         <div className="py-10 md:py-10 relative z-0">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              Your End-to-End Growth & Tech Partner
+              What Our Customers Say
             </h2>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Real reviews from beauty enthusiasts who are testing our alpha version and transforming their social media presence
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
             {[
               {
-                icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746565485/responsive-design_wobrfb.png",
-                title: "Software As A Service (SAAS)",
-                desc: "Fast, mobile-first, beautiful digital experiences, both as Mobile or as webApp",
+                avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+                name: "Sarah Johnson",
+                handle: "@sarahbeauty",
+                rating: 5,
+                review: "Being part of ScrollMine's alpha testing has been incredible! I went from spending hours editing to posting daily in minutes. My engagement went up 300% in just 2 weeks!",
+                product: "Daily Glow Foundation",
+                category: "Makeup Reviews"
               },
               {
-                icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746566344/ai_nuhrup.png",
-                title: "AI Integrations & WhatsApp Automation",
-                desc: "Automate customer care, sales, and engagement",
+                avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+                name: "Maria Rodriguez",
+                handle: "@mariabeauty",
+                rating: 5,
+                review: "As a makeup artist, I was struggling to keep up with content creation. Being an alpha tester for ScrollMine has been amazing - the AI suggestions are spot-on and save me hours every week. My clients love seeing the behind-the-scenes!",
+                product: "Pro Palette Collection",
+                category: "Beauty Tips"
               },
               {
-                icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746566762/growth_ggcqxd.png",
-                title: "Digital Marketing & Social Media",
-                desc: "Get visible, stay viral, grow consistently",
+                avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+                name: "Emma Thompson",
+                handle: "@emmatrends",
+                rating: 5,
+                review: "The alpha version of ScrollMine is incredible! I discovered so many new makeup trends and my followers can't get enough. My affiliate sales increased by 150% since testing it.",
+                product: "Trending Lipsticks",
+                category: "Product Reviews"
               },
               {
-                icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746696017/consultant_bgaqe2.png",
-                title: "Tech Consultations",
-                desc: "Smart strategy for software, hardware & future tech",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+                name: "Alex Chen",
+                handle: "@alexbeauty",
+                rating: 5,
+                review: "Finally, a tool that understands beauty content! Testing the alpha version has been amazing - the captions are engaging and the hashtag suggestions are gold. My organic reach doubled in the first month.",
+                product: "Skincare Routine",
+                category: "Skincare Reviews"
               },
               {
-                icon: "https://res.cloudinary.com/dgbreoalg/image/upload/v1746696632/blockchain-security_lhojoj.png",
-                title: "Blockchain & Web3 Solutions",
-                desc: "DApps, tokenomics, NFT campaigns, and more",
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+                name: "Jessica Park",
+                handle: "@jessbeauty",
+                rating: 5,
+                review: "I was spending 3 hours daily on content creation. Since joining the alpha test, it takes me 30 minutes max! The AI understands my brand voice perfectly. My followers think I hired a social media manager!",
+                product: "Eye Shadow Palette",
+                category: "Tutorial Content"
               },
-            ].map((service, idx) => (
+            ].map((testimonial, idx) => (
               <div
                 key={idx}
-                className="bg-gradient-to-br from-slate-900 to-gray-950 p-6 rounded-xl hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:translate-y-[-5px] border border-gray-700"
+                className="bg-gradient-to-br from-slate-900 to-gray-950 p-6 rounded-xl hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 hover:translate-y-[-5px] border border-gray-700"
               >
-                <div className="text-4xl mb-4">
-                  <img width={50} src={service.icon} />
+                {/* Header with Avatar and Rating */}
+                <div className="flex items-center gap-3 mb-4">
+                  <img 
+                    src={testimonial.avatar} 
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-purple-500/30"
+                  />
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-white">{testimonial.name}</h3>
+                    <p className="text-sm text-purple-400">{testimonial.handle}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-2 text-white">
-                  {service.title}
-                </h3>
-                <p className="text-gray-300">{service.desc}</p>
+
+                {/* Review Text */}
+                <p className="text-gray-300 text-sm mb-4 italic">
+                  "{testimonial.review}"
+                </p>
+
+                {/* Product and Category */}
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-purple-400 font-medium">{testimonial.product}</span>
+                  <span className="text-gray-500 bg-gray-800 px-2 py-1 rounded-full">
+                    {testimonial.category}
+                  </span>
+                </div>
               </div>
             ))}
 
-            <div className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-xl text-white hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 hover:translate-y-[-5px] border border-purple-500/30">
-              <div className="text-4xl mb-4">
-                <img
-                  width={50}
-                  src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746713887/star_cwjdh1.png"
-                />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Custom Solutions</h3>
-              <p>
-                Need something unique? Let's build a solution tailored to your
-                business goals.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* OUR WORKS - DARK MODE - COMPACT */}
-      <section
-        data-aos="zoom-in-up"
-        data-aos-offset="200"
-        data-aos-delay="50"
-        data-aos-duration="1000"
-        data-aos-once="false"
-      >
-        <div className="p-8 bg-gray-950 text-gray-100 border border-gray-700 rounded-md">
-          <h2 className="text-3xl font-bold mb-1 text-center">Our Works</h2>
-          <p className="text-center mb-8 text-xl text-gray-300">
-            Real Brands. Real Results.
-          </p>
-
-          <div className="relative">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xl font-medium flex items-center text-gray-100">
-                <span className="text-3xl mr-3">
-                  {typeof works[currentWork].icon === "string" &&
-                  works[currentWork].icon.startsWith("https://") ? (
-                    <img
-                      src={works[currentWork].icon}
-                      alt="Brand icon"
-                      width={120}
-                      key={currentWork}
-                    />
-                  ) : (
-                    works[currentWork].icon
-                  )}
-                </span>
-              </h3>
-              <div className="flex space-x-2">
-                <button
-                  onClick={prevWork}
-                  className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300"
-                >
-                  <ArrowBigLeft className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={nextWork}
-                  className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-gray-300"
-                >
-                  <ArrowBigRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <div
-                key={currentWork}
-                className="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700"
-              >
-                <div className="aspect-[16/6] bg-slate-950 w-full relative overflow-hidden grid grid-cols-2 grid-rows-2 gap-0">
-                  {/* Left half (full height) */}
-                  <div className="col-span-1 row-span-2 relative overflow-hidden">
-                    <img
-                      src={works[currentWork].image1}
-                      alt={works[currentWork].desc}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* Top right quarter */}
-                  <div className="col-span-1 row-span-1 relative overflow-hidden border-l  border-b border-gray-700">
-                    <img
-                      src={works[currentWork].image}
-                      alt={works[currentWork].desc}
-                      className="w-full h-full object-contain bg-white"
-                    />
-                  </div>
-
-                  {/* Bottom right quarter */}
-                  <div className="col-span-1 row-span-1 relative overflow-hidden border-l border-gray-700">
-                    <img
-                      src={works[currentWork].image}
-                      alt={works[currentWork].desc}
-                      className="w-full h-full object-cover"
-                      style={{ objectPosition: "right bottom" }}
-                    />
-                  </div>
+            <div className="bg-gradient-to-br from-purple-600 to-pink-700 p-6 rounded-xl text-white hover:shadow-lg hover:shadow-pink-500/30 transition-all duration-300 hover:translate-y-[-5px] border border-pink-500/30">
+              <div className="text-center">
+                <div className="text-4xl mb-4">
+                  <Star className="w-12 h-12 mx-auto fill-yellow-400 text-yellow-400" />
                 </div>
-                <div className="p-4">
-                  <div className="flex items-center mb-3">
-                    <div className="w-10 h-10 rounded-full border-1 border-blue-900 flex items-center justify-center text-xl mr-3 text-blue-300 overflow-hidden">
-                      <img
-                        src={works[currentWork].avatar}
-                        alt="Brand icon"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-100 text-sm">
-                        {works[currentWork].name}
-                      </h4>
-                      <div className="flex">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <div key={star}>
-                            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="italic text-gray-400 text-sm mb-2">
-                    "400Brands transformed our business completely. The ROI has
-                    been incredible!"
-                  </p>
-                  <p className="text-blue-300 font-medium text-sm">
-                    {works[currentWork].desc}
-                  </p>
-                </div>
+                <h3 className="text-xl font-bold mb-2">Join Alpha Testing</h3>
+                <p className="text-sm mb-4">
+                  Be part of the exclusive group of beauty creators testing ScrollMine alpha and transforming their social media game
+                </p>
+                <div className="text-2xl font-bold text-yellow-400">4.9/5</div>
+                <p className="text-xs text-gray-300">Average Rating</p>
               </div>
-            </div>
-
-            <div className="flex justify-center mt-4">
-              {works.map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`w-2 h-2 mx-1 rounded-full ${
-                    idx === currentWork ? "bg-blue-500" : "bg-gray-700"
-                  }`}
-                  onClick={() => setCurrentWork(idx)}
-                />
-              ))}
             </div>
           </div>
         </div>
       </section>
 
       
-
-      <section
-        data-aos="zoom-in-up"
-        data-aos-offset="200"
-        data-aos-delay="50"
-        data-aos-duration="1000"
-        data-aos-once="false"
-      >
-        {/* WHY 400BRANDS */}
-        <div className="py-12 text-gray-100">
-          <h2 className="text-3xl font-bold mb-12 text-center">
-            Why 400Brands?
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex flex-col items-center text-center p-6 bg-gray-950 rounded-xl shadow-md border border-gray-700">
-              <div className="w-16 h-16 bg-blue-900 rounded-full flex items-center justify-center mb-4">
-                <img
-                  src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746723502/checklist_ymxzrd.png"
-                  width={90}
-                />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Affordable Excellence</h3>
-              <p className="text-gray-400">
-                Premium quality at budget-friendly prices for African
-                businesses.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center text-center p-6 bg-gray-950 rounded-xl shadow-md border border-gray-700">
-              <div className="w-16 h-16 bg-purple-900 rounded-full flex items-center justify-center mb-4">
-                <img
-                  src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746723633/forecasting_tbrc7h.png"
-                  width={90}
-                />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Future-Tech Ready</h3>
-              <p className="text-gray-400">
-                AI, Web3, and Automation solutions for tomorrow's challenges.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center text-center p-6 bg-gray-950 rounded-xl shadow-md border border-gray-700">
-              <div className="w-16 h-16 bg-yellow-900 rounded-full flex items-center justify-center mb-4">
-                <img
-                  src="https://res.cloudinary.com/dgbreoalg/image/upload/v1746723859/analysis_nnspfu.png"
-                  width={90}
-                />
-              </div>
-              <h3 className="text-xl font-bold mb-2">
-                Data-driven & Design-forward
-              </h3>
-              <p className="text-gray-400">
-                Beautiful solutions backed by real metrics and analytics.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
     </DefaultMain>
   );
 }
